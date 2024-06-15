@@ -1,0 +1,51 @@
+using GoodNewsTask.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+
+namespace GoodNewsTask.Controllers
+{
+    public class HomeController : Controller
+    {
+        #region Исходный код, прописанный по умолчанию
+        
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        #endregion
+        #region Обработка страницы для всплывающих ошибок (например, 404)
+        [Route("~/StatusCodeError/{enteredStatusCode}")]
+        public IActionResult ErrorPage(int enteredStatusCode)
+        {
+            if (enteredStatusCode == 404)
+            {
+                ViewData["Message"] = $"Ошибка {enteredStatusCode}. Была осуществлена попытка входа на несуществующую страницу";
+                return View();
+            }
+            else
+            {
+                ViewData["Message"] = $"Ошибка {enteredStatusCode}";
+                return View();
+            }
+        }
+        #endregion
+    }
+}
