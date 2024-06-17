@@ -1,0 +1,30 @@
+﻿@model User
+@section scripts
+{
+	@*Валидация на стороне клиента осущесвляется этими скриптами*@
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+<form asp-action="Create" asp-controller="Registration" asp-antiforgery="true">
+	<div>
+		<label>Введите Login</label>
+		<input type="text" asp-for="Login" />
+		<span asp-validation-for="Login"></span>
+	</div>
+	<div>
+		<label>Введите Password</label>
+		<input type="password" asp-for="Password" />
+	</div>
+	<div>
+		<label>Повторите пароль</label>
+		<input type="password" asp-for="ConfirmPassword" />
+		<span asp-validation-for="ConfirmPassword"></span>
+	</div>
+	<div>
+		<label>Введите E-mail</label>
+		<input type="email" asp-for="Email" />
+	</div>
+	<div>
+		<input type="submit" value="Зарегистрировать" />
+	</div>
+</form>

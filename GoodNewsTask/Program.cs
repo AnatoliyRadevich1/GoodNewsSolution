@@ -11,9 +11,13 @@ string connection = builder.Configuration.GetConnectionString("ConnectionStringF
 builder.Services.AddDbContext<NewsContext>(options => options.UseSqlServer(connection));
 /*При необходимости помни о выполнении миграций, так как код пишеся методикой Code first:
  1) Установка пакета Microsoft.EntityFrameworkCore.Tools;
- 2) View->Other Windows->Package Manager Console; 
- 3) Add-Migration название_миграции;
- 4) Update-Database надо делать после изменения моделей либо таблиц для БД.*/
+ 2) Убедись в том, что конструкторы моделей не содержат параметров;
+ 3) View->Other Windows->Package Manager Console; 
+ 4) Add-Migration название_миграции;
+ 5) Update-Database надо делать после изменения моделей либо таблиц для БД.
+
+ Касательно Error Number:2714,State:6,Class:16 (В базе данных уже существует объект с именем "Articles" 
+ см. https://stackoverflow.com/questions/26095751/there-is-already-an-object-named-migrationhistory-in-the-database )*/
 
 var app = builder.Build();
 
