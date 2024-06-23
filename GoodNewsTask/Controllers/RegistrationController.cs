@@ -1,5 +1,6 @@
 ﻿using GoodNewsTask.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GoodNewsTask.Controllers
 {
@@ -31,25 +32,56 @@ namespace GoodNewsTask.Controllers
         }
 
         [HttpPost]
-        public void Create(User enteredUser) //ТАК МОЖНО (void, а не IActionResult)?
-        {
-            _db.Users.Add(enteredUser);
-            _db.SaveChanges();
+        public IActionResult Create(User enteredUser)
+		{
+            if (string.IsNullOrEmpty(enteredUser.Login)) 
+            {
+				ModelState.AddModelError("Login", "Не введён Login");
+			}
+            foreach (var user in _db.Users)
+            {
+				if (user.Login == enteredUser.Login)
+				{
+					ModelState.AddModelError("Login", "Такое имя уже кем-то используется");
+				}
+			}
+
+			if (string.IsNullOrEmpty(enteredUser.Password))
+			{
+				ModelState.AddModelError("Password", "Не введён Password");
+			}
+            if (enteredUser.Email == "admin@mail.com")
+            {
+                ModelState.AddModelError("Email", "Такой e-mail нельзя использовать");
+			}
+            foreach (var user in _db.Users) 
+            {
+
+                if (user.Email == enteredUser.Email)
+                {
+					ModelState.AddModelError("Email", "Такой e-mail уже кем-то используется");
+				}
+            }
+			if (string.IsNullOrEmpty(enteredUser.Email))
+			{
+				ModelState.AddModelError("Email", "Не введён Email");
+			}
+			if (enteredUser.SelectedPositiveLevel <0 || enteredUser.SelectedPositiveLevel >100)
+			{
+				ModelState.AddModelError("SelectedPositiveLevel", "Значение должно быть больше ноля (но не более 100)");
+			}
+
+			if (ModelState.IsValid)
+            {
+                _db.Users.Add(enteredUser);
+                _db.SaveChanges();
+				ViewBag.SuccessRegistrationMessage = "Пользователь зарегистрирован";
+			}
+            if (ModelState.IsValid ==false)
+            {
+				ViewBag.SuccessRegistrationMessage = "Пользователь НЕ зарегистрирован";
+			}
+            return View(enteredUser);
         }
-        #region Это старый вариант
-        //public void Create(string enteredLogin, string enteredPassword, string enteredEmail, int enteredPositiveLevel)
-        //{
-        //    _db.Users.Add(new User
-        //    {
-        //        Login = enteredLogin,
-        //        Password = enteredPassword,
-        //        Email = enteredEmail,
-        //        RegistrationDate = DateTime.Now,
-        //        SelectedPositiveLevel = enteredPositiveLevel,
-        //        IsBlocked = false
-        //    });
-        //    _db.SaveChanges();
-        //}
-        #endregion
     }
 }
