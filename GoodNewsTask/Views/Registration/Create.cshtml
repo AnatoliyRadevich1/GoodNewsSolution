@@ -6,34 +6,38 @@
 	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
 <form asp-action="Create" asp-controller="Registration" asp-antiforgery="true">
-	<div>
-		<label>Введите Login</label> <br/>
-		<input type="text" asp-for="Login" />
-		<span asp-validation-for="Login"></span> @*Строка для оображения ошибок валидации со стороны сервера*@
-	</div>
-	<div>
-		<label>Введите Password</label><br />
-		<input type="password" asp-for="Password" />
-		<span asp-validation-for="Password"></span> @*Строка для оображения ошибок валидации со стороны сервера*@
-	</div>
-	<div>
-		<label>Повторите пароль</label><br />
-		<input type="password" asp-for="ConfirmPassword" />
-		<span asp-validation-for="ConfirmPassword"></span> @*Строка для оображения ошибок валидации со стороны сервера*@
-	</div>
-	<div>
-		<label>Введите E-mail</label><br />
-		<input type="email" asp-for="Email" />
-		<span asp-validation-for="Email"></span> @*Строка для оображения ошибок валидации со стороны сервера*@
-	</div>
-	<div>
-		<label>Введите уровень позитивности</label><br />
-		<input type="number" asp-for="SelectedPositiveLevel" />
-		<span asp-validation-for="SelectedPositiveLevel"></span> @*Строка для оображения ошибок валидации со стороны сервера*@
+	<div class="col-lg-7">
+		<label class="form-label">Введите Login</label>
+		<input class="form-control" type="text" asp-for="Login" />
+		<span asp-validation-for="Login"></span> @*Строка для отображения ошибок валидации со стороны сервера*@
 	</div>
 	<br />
-	<div>
-		<input type="submit" value="Зарегистрировать" />
+	<div class="col-lg-7">
+		<label class="form-label">Введите Password</label>
+		<input class="form-control" type="password" asp-for="Password" />
+		<span asp-validation-for="Password"></span> @*Строка для отображения ошибок валидации со стороны сервера*@
+	</div>
+	<br />
+	<div class="col-lg-7">
+		<label class="form-label">Повторите пароль</label>
+		<input class="form-control" type="password" asp-for="ConfirmPassword" />
+		<span asp-validation-for="ConfirmPassword"></span> @*Строка для отображения ошибок валидации со стороны сервера*@
+	</div>
+	<br />
+	<div class="col-lg-7">
+		<label class="form-label">Введите E-mail</label>
+		<input class="form-control" type="email" asp-for="Email" />
+		<span asp-validation-for="Email"></span> @*Строка для отображения ошибок валидации со стороны сервера*@
+	</div>
+	<br />
+	<div class="col-lg-7">
+		<label class="form-label">Введите уровень позитивности</label>
+		<input class="form-control" type="number" asp-for="SelectedPositiveLevel" />
+		<span asp-validation-for="SelectedPositiveLevel"></span> @*Строка для отображения ошибок валидации со стороны сервера*@
+	</div>
+	<br />
+	<div class="col-lg-7">
+		<input class="btn btn-outline-info" type="submit" value="Зарегистрировать" />
 	</div>
 </form>
 <br />

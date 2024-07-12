@@ -12,7 +12,7 @@ namespace GoodNewsTask.Controllers
             _db = enteredContext;
         }
 
-        [AcceptVerbs("Get", "Post")] //ЭТО НАДО БУДЕТ СПРОСИТЬ КАК ДЕЛАТЬ ПРОВЕРКУ ПО СПИСКУ ПОЧОВЫХ ЯЩИКОВ (см. https://metanit.com/sharp/aspnetmvc/9.3.php )
+        [AcceptVerbs("Get", "Post")] //ЭТО НАДО БУДЕТ СПРОСИТЬ КАК ДЕЛАТЬ ПРОВЕРКУ ПО СПИСКУ ПОЧТОВЫХ ЯЩИКОВ (см. https://metanit.com/sharp/aspnetmvc/9.3.php )
         public IActionResult CheckEmail(string enteredEmail)
         {
             if (enteredEmail == "admin@mail.com")
