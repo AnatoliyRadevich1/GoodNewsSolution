@@ -25,7 +25,7 @@ namespace GoodNewsTask.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]/[action]")] //для Swagger-а
+        [Route("[controller]/[action]")] //для Swagger-а
         public IActionResult Create()
         {
             //await Task.CompletedTask; так не надо делать
@@ -34,7 +34,7 @@ namespace GoodNewsTask.Controllers
         }
 
         [HttpPost]
-        [Route("api/[controller]/[action]")] //для Swagger-а
+        [Route("[controller]/[action]")] //для Swagger-а
         public IActionResult Create(User enteredUser)
 		{
             if (string.IsNullOrEmpty(enteredUser.Login)) 
