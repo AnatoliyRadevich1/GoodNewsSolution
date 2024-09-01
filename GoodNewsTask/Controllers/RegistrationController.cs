@@ -12,6 +12,7 @@ namespace GoodNewsTask.Controllers
             _db = enteredContext;
         }
 
+        [HttpGet]
         [AcceptVerbs("Get", "Post")] //ЭТО НАДО БУДЕТ СПРОСИТЬ КАК ДЕЛАТЬ ПРОВЕРКУ ПО СПИСКУ ПОЧТОВЫХ ЯЩИКОВ (см. https://metanit.com/sharp/aspnetmvc/9.3.php )
         public IActionResult CheckEmail(string enteredEmail)
         {
@@ -24,6 +25,7 @@ namespace GoodNewsTask.Controllers
         }
 
         [HttpGet]
+        [Route("api/[controller]/[action]")] //для Swagger-а
         public IActionResult Create()
         {
             //await Task.CompletedTask; так не надо делать
@@ -32,6 +34,7 @@ namespace GoodNewsTask.Controllers
         }
 
         [HttpPost]
+        [Route("api/[controller]/[action]")] //для Swagger-а
         public IActionResult Create(User enteredUser)
 		{
             if (string.IsNullOrEmpty(enteredUser.Login)) 

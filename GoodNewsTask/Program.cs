@@ -1,5 +1,7 @@
 using GoodNewsTask.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,19 @@ builder.Services.AddDbContext<NewsContext>(options => options.UseSqlServer(conne
  Касательно Error Number:2714,State:6,Class:16 (В базе данных уже существует объект с именем "Articles" 
  см. https://stackoverflow.com/questions/26095751/there-is-already-an-object-named-migrationhistory-in-the-database )*/
 
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));//установка поддержки логирования Serilog-ом
+
+builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+	c.SwaggerDoc("v3", new OpenApiInfo
+	{
+		Version = "v3",//описание версии (в сером овале)
+		Title = "Заголовок для описания проверяемой программы GoodNewsSolution",
+		Description = "Простейший пример для реализации Swagger UI в GoodNewsSolution",
+	});
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,6 +48,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseStatusCodePagesWithRedirects("~/StatusCodeError/{0}"); //переадресация на несуществующие страницы
+app.UseSerilogRequestLogging();//добавление поддержки для логирования запросов с использрованием Serilog-а
+
 app.UseRouting();
 
 app.UseAuthorization();
@@ -40,5 +57,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");//потом надо будет сменить
+
+app.UseSwagger();
+app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v3/swagger.json", "Показ API V3"); }); //localhost:XXXX/swagger/v3/swagger.json - ссылка на JSON-file экземпляра класса OpenApiInfo (см. его выше)
 
 app.Run();

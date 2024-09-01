@@ -15,16 +15,18 @@ namespace GoodNewsTask.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
-
+        [HttpGet]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        [HttpGet]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -32,6 +34,8 @@ namespace GoodNewsTask.Controllers
         }
         #endregion
         #region Обработка страницы для всплывающих ошибок (например, 404)
+
+        [HttpGet]
         [Route("~/StatusCodeError/{enteredStatusCode}")]
         public IActionResult ErrorPage(int enteredStatusCode)
         {

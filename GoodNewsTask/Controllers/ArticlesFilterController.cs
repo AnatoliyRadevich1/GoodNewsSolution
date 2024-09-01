@@ -12,6 +12,7 @@ namespace GoodNewsTask.Controllers
             _db = enteredContext;
         }
 
+        [HttpGet]
         public void Filter(Article articleFromArticlesConductorController) //public async Task FilterAsync(Article articleFromArticlesConductorController) не надо
         {
             Article selectedArticle = new Article();
