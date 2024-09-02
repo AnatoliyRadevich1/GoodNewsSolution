@@ -13,21 +13,19 @@ namespace GoodNewsTask.Controllers
         }
 
         [HttpGet]
-        public void Filter(Article articleFromArticlesConductorController) //получаем Article из ArticlesConductorController
+        public void Filter(List<Article> articlesFromArticlesConductorController) //получаем Article из ArticlesConductorController
         {
-            RatingArticles ratingArticles = new RatingArticles(); //создаём переменную модели RatingArticles для определения позитивноси новости
-
-            articleFromArticlesConductorController.PositiveLevel = ratingArticles.Filtering(articleFromArticlesConductorController.Text!);
-            //определяем уровень позитивности через фильтр слов и устанавливаем уровень позитивности статьи
-
-            //1)определяем слова, задающие рейтинг
-            //2)каждой новости на основе каждого слова задаём рейтинг через LINQ
-            //3)сортируем новости по критерию Article.PositiveLevel > 0
-            //4)отправляем новости в контроллер к подключением к базе данных (скорее всего HomeController)
-            if (articleFromArticlesConductorController.PositiveLevel > 0)
+            
+            foreach (var filteringArticle in articlesFromArticlesConductorController)
             {
-                _db.Articles.Add(articleFromArticlesConductorController);
-                _db.SaveChanges();//await _db.SaveChangesAsync(); не надо
+                RatingArticles ratingArticles = new RatingArticles(); //создаём переменную модели RatingArticles для определения позитивноси новости
+                filteringArticle.PositiveLevel = ratingArticles.Filtering(filteringArticle.Text!);//определяем позитивнось новости в методе RatingArticles.Filtering()
+
+                if (filteringArticle.PositiveLevel>0)//отбираем новости по критерию Article.PositiveLevel > 0
+                {
+                    _db.Articles.Add(filteringArticle);//отправляем новости в контроллер к подключением к базе данных (скорее всего HomeController)
+                    _db.SaveChanges();//await _db.SaveChangesAsync(); не надо
+                }
             }
         }
     }
