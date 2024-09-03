@@ -15,6 +15,7 @@ namespace GoodNewsTask.Controllers
         [HttpGet]
         public IActionResult ShowArticlesFromDBForGuests()
         {
+            /*По состоянию на 03.09.2024 есть смысл им скидывать новости из БД с уровнем позитивности от 5 до 10 */
             _article_user_model.ListUsers = _db.Users.ToList();
             _article_user_model.ListArticles = _db.Articles.ToList();
             return View(_article_user_model);
@@ -23,9 +24,19 @@ namespace GoodNewsTask.Controllers
         [HttpGet]
         public IActionResult ShowArticlesFromDBForRegisteredUsers(string enteredlogin) //User registeredUserInfo
         {
-            //пока что предполагаю, что страница будет выглядеть так: ~/нужныйМетод?User.Login=Логин&User.SelectedPositiveLevel=5
-            //см. https://metanit.com/sharp/aspnetmvc/2.7.php и https://metanit.com/sharp/aspnet5/8.5.php !!!
-            User registeredUserInfo = null!;
+			/*По состоянию на 03.09.2024 есть идея, что тут будут браться новости из БД под уровень позитивности
+			наподобие
+			var query = _db.Users.ToList();//Получение всех записей из таблицы по юзерам
+            var query2 = _db.Articles.ToList();//Получение всех записей из таблицы по новосным статьям
+            if(user.PositiveLevel <= article.PositiveLevel)
+            {
+                //Код показа новостей с уровнем позитивности не менее user.PositiveLevel 
+            } 
+             */
+
+			//пока что предполагаю, что страница будет выглядеть так: ~/нужныйМетод?User.Login=Логин&User.SelectedPositiveLevel=5
+			//см. https://metanit.com/sharp/aspnetmvc/2.7.php и https://metanit.com/sharp/aspnet5/8.5.php !!!
+			User registeredUserInfo = null!;
 
             var queryLogin = _db.Users.Where(anyUser => anyUser.Login == enteredlogin);
             foreach (var anyUser in queryLogin)
