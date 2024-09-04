@@ -76,7 +76,8 @@ namespace GoodNewsTask.Controllers
             if (queryUserFromDB != null)
             {
                 queryUserFromDB.Password = enteredUser.Password;
-                queryUserFromDB.SelectedPositiveLevel = enteredUser.SelectedPositiveLevel;
+				queryUserFromDB.ConfirmPassword = enteredUser.ConfirmPassword;
+				queryUserFromDB.SelectedPositiveLevel = enteredUser.SelectedPositiveLevel;
 				//_db.Users.Update(queryUserFromDB); писать не надо, т.к. _db.SaveChanges(); самостоятельно это делает благодаря механизмам Entity Framework
 				_db.SaveChanges();
                 ViewBag.SuccessRegistrationMessage = "Пароль и уровень позитивности успешно обновлены.";
