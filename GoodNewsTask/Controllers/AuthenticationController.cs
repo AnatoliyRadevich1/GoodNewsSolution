@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GoodNewsTask.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GoodNewsTask.Controllers
 {
@@ -11,6 +12,7 @@ namespace GoodNewsTask.Controllers
         {
             _db = enteredContext;
         }
+
         /*По состоянию на 03.09.2024 есть идея, что тут будет View() с полями "Логин", "Пароль", кнопками "Вход", "Зарегистрироваться", "Восстанновление пароля", а также с 
          полем ввода уровня позитивности.
         Кнопка "Вход" (при верных логине и пароле) будет переадресовывавать на страниу с новостями, отфильтрованными по полю уровня позиивности
@@ -58,6 +60,7 @@ namespace GoodNewsTask.Controllers
             return RedirectToAction("InputLoginPassword", "Authentication", _isCorrectLoginAndPassword);
         }
 
+
 		[HttpGet]
 		[Route("[controller]/[action]")] //для Swagger-а
 		public IActionResult RestorePasswordAndPositiveLevel()
@@ -65,28 +68,27 @@ namespace GoodNewsTask.Controllers
 			return View();
 		}
 
-		[HttpPost]
+		[HttpPost] //Это напоминание про CRUD-операции https://metanit.com/sharp/aspnet5/23.2.php
 		[Route("[controller]/[action]")] //для Swagger-а
-		public IActionResult RestorePasswordAndPositiveLevel([FromForm] string entreredLogin, string enteredEmail, string enteredPassword, int enteredPositiveLevel)
+		public IActionResult RestorePasswordAndPositiveLevel([FromForm] User enteredUser)
 		{
-            var query = _db.Users.ToList();//Получение всех записей из таблицы
-            foreach (var user in query)
+            var queryUserFromDB = _db.Users.FirstOrDefault(user => user.Login == enteredUser.Login && user.Email == enteredUser.Email);//Поиск пользователя по логину и email
+            if (queryUserFromDB != null)
             {
-                if (user.Login == entreredLogin && user.Email == enteredEmail)
-                {
-                    user.Password = enteredPassword;
-                    user.SelectedPositiveLevel = enteredPositiveLevel;
-                    _db.Users.Update(user);
-                    _db.SaveChanges();
-					ViewBag.SuccessRegistrationMessage = "Пользователь обновил пароль и уровень позитивности новостей";
-				}
-                else 
-                {
-					ViewBag.SuccessRegistrationMessage = "Пользователь ввёл некорректные данные";
-				}
+                queryUserFromDB.Password = enteredUser.Password;
+                queryUserFromDB.SelectedPositiveLevel = enteredUser.SelectedPositiveLevel;
+				//_db.Users.Update(queryUserFromDB); писать не надо, т.к. _db.SaveChanges(); самостоятельно это делает благодаря механизмам Entity Framework
+				_db.SaveChanges();
+                ViewBag.SuccessRegistrationMessage = "Пароль и уровень позитивности успешно обновлены.";
+        }
+            else
+            {
+                ViewBag.SuccessRegistrationMessage = "Пользователь не найден или введены некорректные данные.";
             }
-			return RedirectToAction("InputLoginPassword", "Authentication", _isCorrectLoginAndPassword);
-		}
+            return RedirectToAction("InputLoginPassword", "Authentication", _isCorrectLoginAndPassword);
+
+
+        }
 
 	}
 }
