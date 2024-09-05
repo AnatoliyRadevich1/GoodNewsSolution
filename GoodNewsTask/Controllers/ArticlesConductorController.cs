@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 namespace GoodNewsTask.Controllers
 {
+    //ВМЕСТО ЭТОГО КОДА ВСЁ СДЕЛАНО В ArticlesConductorFilterController.cs
+    #region Старый уже ненужный код
     public class ArticlesConductorController : Controller
     {
         [HttpGet]
@@ -33,4 +35,5 @@ namespace GoodNewsTask.Controllers
             //Можно ли куда-нибудь передавать наши данные как API для кого-то ещё?
         }
     }
+    #endregion
 }
