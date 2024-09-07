@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GoodNewsTask.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace GoodNewsTask.Controllers
 {
@@ -12,14 +14,26 @@ namespace GoodNewsTask.Controllers
             _db = enteredContext;
         }
 
+        
         [HttpGet]
         public IActionResult ShowArticlesFromDBForGuests()
         {
-            /*По состоянию на 03.09.2024 есть смысл им скидывать новости из БД с уровнем позитивности от 5 до 10 */
-            _article_user_model.ListUsers = _db.Users.ToList();
-            _article_user_model.ListArticles = _db.Articles.ToList();
-            return View(_article_user_model);
+            //https://zzzcode.ai/answer-question?id=2aaf2d19-b4d9-40f0-a9b0-0ebbaf119fca
+            var articles = _db.Articles.ToList();
+            return View(articles);
         }
+        
+
+        #region Скорее всего не нужно
+        //[HttpPost]
+        //public IActionResult ShowArticlesFromDBForGuests()
+        //{
+        //    /*По состоянию на 03.09.2024 есть смысл им скидывать новости из БД с уровнем позитивности от 5 до 10 */
+        //    _article_user_model.ListUsers = _db.Users.ToList();
+        //    _article_user_model.ListArticles = _db.Articles.ToList();
+        //    return View(_article_user_model);
+        //}
+        #endregion
 
         [HttpGet]
         public IActionResult ShowArticlesFromDBForRegisteredUsers(string enteredlogin) //User registeredUserInfo

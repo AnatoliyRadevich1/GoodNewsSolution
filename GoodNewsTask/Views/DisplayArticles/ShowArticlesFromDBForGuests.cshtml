@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Article>
+
+<h1>Список статей</h1>
+
+<table class="table table-bordered" align="center">
+    <thead class="table-light">
+        <tr>
+            <th scope="col">Ссылки на статьи</th>
+            <th scope="col">Текст</th>
+            <th scope="col">Изображение</th>
+            <th scope="col">Дата публикации</th>
+            <th scope="col">Уровень позитива</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var article in Model)
+        {
+            <tr>
+                <td scope="row"><a href="@article.Title">@article.Title</a></td>
+                <td scope="row">@article.Text</td>
+                <td scope="row"><img src="@article.Source" alt="Изображение статьи" style="width:350px; height:auto;" /></td>
+                <td scope="row">@article.PublicationDate.ToString("dd.MM.yyyy H:mm")</td>
+                <td scope="row">@article.PositiveLevel</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
