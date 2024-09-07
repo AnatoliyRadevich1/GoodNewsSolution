@@ -24,7 +24,7 @@ namespace GoodNewsTask.Controllers
             articles.AddRange(_parserSputnik.ParseXmlForLinks("https://sputnik.by/sitemap.xml")); //Добавляем лист с новостями из Sputnik.by
             
             
-            //Если глючит или тормозит. закомменируй 
+            //Если глючит или тормозит, закомменируй 
             //articles.AddRange(_parserLenta.ParseXmlForLinks("https://lenta.ru/rss/articles"));
             //или
             //articles.AddRange(_parserSputnik.ParseXmlForLinks("https://sputnik.by/sitemap.xml"));
@@ -2998,11 +2998,12 @@ namespace GoodNewsTask.Controllers
                     article.Id = new Guid();
                     article.PublicationDate = DateTime.Now;
                     //для внесения в бд
-                    //_db.Articles.Add(article);
+                    _db.Articles.Add(article);
                 }
             }
-            //_db.SaveChanges();
+            _db.SaveChanges();
             // подсказка по БД https://zzzcode.ai/answer-question?id=00bbd0fd-4d13-4003-a154-d32c637bb8c9
+            // подсказка по БД https://zzzcode.ai/answer-question?id=d796285d-03bb-4ba4-8f68-a06c9c614bbb
         }
     }
 }
