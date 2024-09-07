@@ -2,25 +2,32 @@
 
 <h1>Список статей</h1>
 
-<table class="table table-bordered" align="center">
+<style> /*Да, я так захотел сделать, а не через site.css. Например, через site.css сделан шрифт*/
+    table {
+        position: relative; /* Устанавливаем относительное позиционирование */
+        left: -15%; /* Сдвигаем таблицу влево на 15% */
+    }
+</style>
+
+<table class="table table-bordered" align="center" width="100%" >
     <thead class="table-light">
         <tr>
-            <th scope="col">Ссылки на статьи</th>
-            <th scope="col">Текст</th>
-            <th scope="col">Изображение</th>
-            <th scope="col">Дата публикации</th>
-            <th scope="col">Уровень позитива</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Ссылки на статьи</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Текст</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Изображение</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Дата публикации</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Уровень позитива</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var article in Model)
         {
             <tr>
-                <td scope="row"><a href="@article.Title">@article.Title</a></td>
-                <td scope="row">@article.Text</td>
-                <td scope="row"><img src="@article.Source" alt="Изображение статьи" style="width:350px; height:auto;" /></td>
-                <td scope="row">@article.PublicationDate.ToString("dd.MM.yyyy H:mm")</td>
-                <td scope="row">@article.PositiveLevel</td>
+                <td id="font-Montserrat" scope="row"><a href="@article.Title">@article.Title</a></td>
+                <td id="font-Montserrat" scope="row">@article.Text</td>
+                <td id="font-Montserrat" scope="row"><img src="@article.Source" alt="Изображение статьи" style="width:350px; height:auto;" /></td>
+                <td id="font-Montserrat" scope="row">@article.PublicationDate.ToString("dd.MM.yyyy H:mm")</td>
+                <td id="font-Montserrat" scope="row">@article.PositiveLevel</td>
             </tr>
         }
     </tbody>
