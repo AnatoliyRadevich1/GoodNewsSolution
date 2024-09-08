@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GoodNewsTask.Models;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace GoodNewsTask.Controllers
 {
@@ -13,54 +14,54 @@ namespace GoodNewsTask.Controllers
             _db = enteredContext;
         }
 
-        /*По состоянию на 03.09.2024 есть идея, что тут будет View() с полями "Логин", "Пароль", кнопками "Вход", "Зарегистрироваться", "Восстанновление пароля", а также с 
-         полем ввода уровня позитивности.
-        Кнопка "Вход" (при верных логине и пароле) будет переадресовывавать на страниу с новостями, отфильтрованными по полю уровня позиивности
-        Кнопка "Зарегистрироваться" отправит на View() от RegistrationCOntroller.Create()
-        Кнопка "Восстановление пароля" отправит на страницу с полями ввода "Логин", "E-mail", "Пароль","Повтор пароля". При корректных данных после нажатия кнопки отправить 
-        будет в БД обновлён пароль, произойдёт переадресация назад во View() данного контроллера AuthentificationController. В противном случае поля очистятся*/
 
+        //РАБОТАЕТ КОРРЕКТНО!!!
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
         public IActionResult InputLoginPassword()
         {
             return View();
         }
-        #region Это лишнее, т.к. [FromForm] однозначно определяет источник параметро метода
-        //[HttpPost]
-        //public IActionResult InputLoginPassword([FromQuery] string entreredLogin, string enteredPassword)
-        //{
-        //    return RedirectToAction("~/Home/ErrorPage.cshtml");//если пользователь решил через браузерную строку подбирать логины и пароли, то его отправляем в 404
-        //}
-        #endregion
+        //РАБОТАЕТ КОРРЕКТНО!!! НО СЮДА НАДО БУДЕТ ДОБАВИТЬ РАБОТУ С АДМИНИСТРАТОРОМ
         [HttpPost]
         [Route("[controller]/[action]")] //для Swagger-а
-        public IActionResult InputLoginPassword([FromForm] string entreredLogin, string enteredPassword) //[FromForm] для получения данных из параметров метода
+        public IActionResult InputLoginPassword([FromForm] User enteredUser)
         {
-            var query = _db.Users.ToList();//Получение всех записей из таблицы
-            foreach (var user in query)
+            var queryUserFromDB = _db.Users.FirstOrDefault(user => user.Login == enteredUser.Login && user.Password == enteredUser.Password);//Поиск пользователя по логину и паролю
+            
+            if (queryUserFromDB != null && queryUserFromDB.IsBlocked == false)
             {
-                if (user.Login == entreredLogin && user.Password == enteredPassword && user.IsBlocked == false)
-                {
-                    /*По состоянию на 03.09.2024 у тебя есть в TestSolution->TaslAuth код, где реализованы [AllowAnonymous], 
-                    [Authorize(Roles="Admin, User")],[Authorize(Roles="Admin")]. Вот прямо вместо этого коммментария можно оттуда добавить тот код*/
-                    return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "DisplayArticlesController", user.Login.ToString());
+                _isCorrectLoginAndPassword = true;
+                return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "DisplayArticles", new { userId = queryUserFromDB.Id });
+                //return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "DisplayArticles", new { enteredPositiveLevel = queryUserFromDB.SelectedPositiveLevel });
 
-                    //пока что предполагаю, что страница будет выглядеть так: ~/нужныйМетод?User.Login=Логин&User.SelectedPositiveLevel=5
-                    //см. https://metanit.com/sharp/aspnetmvc/2.7.php и https://metanit.com/sharp/aspnet5/8.5.php !!!
-                }
-                else
-                {
-                    ViewBag.FailedAuthentificationMessage = "Пользователь заблокирован либо он написал неверную комбинацию логина и пароля";
-				}
+
+                // подсказка с передачей переменной https://zzzcode.ai/answer-question?id=8999dede-0adf-4a8b-afcb-f0d969178b35
+
+                #region Второй способ реализации (корректно работающий код)
+                //var selectedPositiveLevelOfUser = _db.Users.Where(u => u.Login == enteredUser.Login && u.Password == enteredUser.Password)
+                //                           .Select(u => u.SelectedPositiveLevel)
+                //                           .FirstOrDefault();
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //Console.WriteLine($"selectedPositiveLevelOfUser = {selectedPositiveLevelOfUser}");
+                //Console.ResetColor();
+                //return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "DisplayArticles", new { enteredPositiveLevel = queryUserFromDB.SelectedPositiveLevel });
+                #endregion
+                /*По состоянию на 03.09.2024 у тебя есть в TestSolution->TaslAuth код, где реализованы [AllowAnonymous], 
+                [Authorize(Roles="Admin, User")],[Authorize(Roles="Admin")]. Вот прямо вместо этого коммментария можно оттуда добавить тот код*/
+                //см. https://metanit.com/sharp/aspnetmvc/2.7.php и https://metanit.com/sharp/aspnet5/8.5.php !!!
             }
+            else
+            {
+                ViewBag.FailedAuthentificationMessage = "Пользователь заблокирован либо он написал неверную комбинацию логина и пароля";
+                return View("InputLoginPassword", enteredUser); // Возвращаем представление с моделью
+            }
+
             //Не надо писать return await Task.Run<IActionResult>(() => RedirectToAction("InputLoginPasswordAsync", "Authentication", "Некорректно введены логин и/или пароль"));
             //https://stackoverflow.com/questions/40968182/return-redirecttoaction-in-mvc-using-async-await RedirectToAction()
-            _isCorrectLoginAndPassword = false; //"Некорректно введены логин и/или пароль"
-            return RedirectToAction("InputLoginPassword", "Authentication", _isCorrectLoginAndPassword);
         }
 
-
+        //РАБОТАЕТ КОРРЕКТНО!!!
 		[HttpGet]
 		[Route("[controller]/[action]")] //для Swagger-а
 		public IActionResult RestorePasswordAndPositiveLevel()
@@ -80,11 +81,12 @@ namespace GoodNewsTask.Controllers
 				queryUserFromDB.SelectedPositiveLevel = enteredUser.SelectedPositiveLevel;
 				//_db.Users.Update(queryUserFromDB); писать не надо, т.к. _db.SaveChanges(); самостоятельно это делает благодаря механизмам Entity Framework
 				_db.SaveChanges();
-                ViewBag.SuccessRegistrationMessage = "Пароль и уровень позитивности успешно обновлены.";
+                ViewBag.SuccessRegistrationMessage = "Пароль и уровень позитивности успешно обновлены.";//это просто не успевает отобразиться
         }
             else
             {
-                ViewBag.SuccessRegistrationMessage = "Пользователь не найден или введены некорректные данные.";
+                ViewBag.SuccessRegistrationMessage = "Пользователь не найден или введены некорректные данные.";//это просто не успевает отобразиться
+
             }
             return RedirectToAction("InputLoginPassword", "Authentication", _isCorrectLoginAndPassword);
 
