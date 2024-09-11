@@ -1,0 +1,44 @@
+﻿@model List<Article>
+
+@* Подсказка по блокировке или разблокировке пользователей https://zzzcode.ai/answer-question?id=2f261780-3454-43fe-9106-3a20f065833b *@
+@* Подсказка по кнопке удаления статьи из БД https://zzzcode.ai/answer-question?id=9c7b394c-65bf-49d5-8099-117eeae3a200 *@
+
+<style>
+    /*Да, я так захотел сделать, а не через site.css. Например, через site.css сделан шрифт*/
+    table {
+        position: relative; /* Устанавливаем относительное позиционирование */
+        left: -15%; /* Сдвигаем таблицу влево на 15% */
+    }
+</style>
+<h3>Список статей:</h3>
+<table class="table table-bordered" align="center" width="100%">
+    <thead class="table-light">
+        <tr>
+            <th id="font-Montserrat" scope="col" valign="middle">Ссылки на статьи</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Текст</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Изображение</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Дата публикации</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Уровень позитива</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Кнопки удаления новостных статей</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var article in Model)
+        {
+            <tr>
+                <td id="font-Montserrat" scope="row"><a href="@article.Title">@article.Title</a></td>
+                <td id="font-Montserrat" scope="row">@article.Text</td>
+                <td id="font-Montserrat" scope="row"><img src="@article.Source" alt="Изображение статьи" style="width:350px; height:auto;" /></td>
+                <td id="font-Montserrat" scope="row">@article.PublicationDate.ToString("dd.MM.yyyy H:mm")</td>
+                <td id="font-Montserrat" scope="row">@article.PositiveLevel</td>
+                <td>
+                    @* <form asp-action="ShowArticlesFromDBForAdmin" asp-controller="Display" asp-route-id="@article.Id" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить эту статью?');"> *@
+                    <form asp-action="ShowArticlesFromDBForAdmin" asp-controller="Display" method="post">
+                        <input name="id" type="hidden" value="@article.Id" /> @*так надо передавать данные name ="id" - название парамера в методе*@
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

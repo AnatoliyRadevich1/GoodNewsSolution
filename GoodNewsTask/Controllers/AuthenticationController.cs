@@ -32,8 +32,8 @@ namespace GoodNewsTask.Controllers
             if (queryUserFromDB != null && queryUserFromDB.IsBlocked == false)
             {
                 _isCorrectLoginAndPassword = true;
-                return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "DisplayArticles", new { userId = queryUserFromDB.Id });
-                //return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "DisplayArticles", new { enteredPositiveLevel = queryUserFromDB.SelectedPositiveLevel });
+                return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "Display", new { userId = queryUserFromDB.Id });
+                //return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "Display", new { enteredPositiveLevel = queryUserFromDB.SelectedPositiveLevel });
 
 
                 // подсказка с передачей переменной https://zzzcode.ai/answer-question?id=8999dede-0adf-4a8b-afcb-f0d969178b35
@@ -45,7 +45,7 @@ namespace GoodNewsTask.Controllers
                 //Console.ForegroundColor = ConsoleColor.Red;
                 //Console.WriteLine($"selectedPositiveLevelOfUser = {selectedPositiveLevelOfUser}");
                 //Console.ResetColor();
-                //return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "DisplayArticles", new { enteredPositiveLevel = queryUserFromDB.SelectedPositiveLevel });
+                //return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "Display", new { enteredPositiveLevel = queryUserFromDB.SelectedPositiveLevel });
                 #endregion
                 /*По состоянию на 03.09.2024 у тебя есть в TestSolution->TaslAuth код, где реализованы [AllowAnonymous], 
                 [Authorize(Roles="Admin, User")],[Authorize(Roles="Admin")]. Вот прямо вместо этого коммментария можно оттуда добавить тот код*/

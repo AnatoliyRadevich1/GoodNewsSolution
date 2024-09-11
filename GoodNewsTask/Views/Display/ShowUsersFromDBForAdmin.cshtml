@@ -1,0 +1,46 @@
+﻿@model List<User>
+@* подсказка по блокировке или разблокировке пользователей https://zzzcode.ai/answer-question?id=2f261780-3454-43fe-9106-3a20f065833b *@
+@* подсказка по кнопке удаления статьи из БД https://zzzcode.ai/answer-question?id=9c7b394c-65bf-49d5-8099-117eeae3a200 *@
+<style>
+    /*Да, я так захотел сделать, а не через site.css. Например, через site.css сделан шрифт*/
+    table {
+        position: relative; /* Устанавливаем относительное позиционирование */
+        left: -15%; /* Сдвигаем таблицу влево на 15% */
+    }
+</style>
+<h3>Список пользователей:</h3>
+<table class="table table-bordered" align="center" width="100%">
+    <thead class="table-light">
+        <tr>
+            <th id="font-Montserrat" scope="col" valign="middle">GUID</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Login</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Password</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Email</th>
+            <th id="font-Montserrat" scope="col" valign="middle">SelectedPositiveLevel</th>
+            <th id="font-Montserrat" scope="col" valign="middle">RegistrationDate</th>
+            <th id="font-Montserrat" scope="col" valign="middle">IsBlocked</th>
+            <th id="font-Montserrat" scope="col" valign="middle">Кнопки блокировки пользователей</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td id="font-Montserrat" scope="row">@user.Id</td>
+                <td id="font-Montserrat" scope="row">@user.Login</td>
+                <td id="font-Montserrat" scope="row">@user.Password</td>
+                <td id="font-Montserrat" scope="row">@user.Email</td>
+                <td id="font-Montserrat" scope="row">@user.SelectedPositiveLevel</td>
+                <td id="font-Montserrat" scope="row">@user.RegistrationDate.ToString("dd.MM.yyyy H:mm")</td>
+                <td id="font-Montserrat" scope="row">@user.IsBlocked</td>
+                <td>
+                    <form asp-action="ShowUsersFromDBForAdmin" asp-route-userId="@user.Id" method="post">
+                        <button type="submit" class="btn btn-warning">
+                            @(user.IsBlocked ? "Разблокировать" : "Заблокировать")
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

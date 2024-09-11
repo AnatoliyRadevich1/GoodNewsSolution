@@ -6,17 +6,18 @@ using Serilog;
 
 namespace GoodNewsTask.Controllers
 {
-    public class DisplayArticlesController : Controller
+    public class DisplayController : Controller
     {
         private readonly NewsContext _db;
         public ArticleUser _article_user_model = null!; //скорее всего надо будет удалить
-        public DisplayArticlesController(NewsContext enteredContext)
+        public DisplayController(NewsContext enteredContext)
         {
             _db = enteredContext;
         }
 
         
         [HttpGet]
+        [Route("[controller]/[action]")] //для Swagger-а
         public IActionResult ShowArticlesFromDBForGuests()
         {
             //подсказка https://zzzcode.ai/answer-question?id=2aaf2d19-b4d9-40f0-a9b0-0ebbaf119fca
@@ -26,6 +27,7 @@ namespace GoodNewsTask.Controllers
         
 
         [HttpGet]
+        [Route("[controller]/[action]")] //для Swagger-а
         public IActionResult ShowArticlesFromDBForRegisteredUsers(Guid userId) //User registeredUserInfo
         {
             //см. https://metanit.com/sharp/aspnetmvc/2.7.php и https://metanit.com/sharp/aspnet5/8.5.php !!!
@@ -37,7 +39,6 @@ namespace GoodNewsTask.Controllers
                 ViewData["UserNotFoundMessage"] = "Нет такого пользователя";
                 return View();
             }
-
             
             var articles = _db.Articles.Where(a => a.PositiveLevel >= selectedUser.SelectedPositiveLevel).ToList();// Получаем статьи, соответствующие уровню позитива пользователя
 
@@ -51,15 +52,46 @@ namespace GoodNewsTask.Controllers
         }
 
         [HttpGet]
+        [Route("[controller]/[action]")] //для Swagger-а
         public IActionResult ShowArticlesFromDBForAdmin()
         {
-            //логика для администратора:дополнительный вывод таблицы с пользователями. блокировка пользователей
-            //return await Task.FromResult(View(await _db.Articles.ToListAsync())); не надо так писать
-            //return View(_db.Users.ToList()); //return View(await _db.Articles.ToListAsync()); не надо
-            _article_user_model.ListUsers = _db.Users.ToList();
-            _article_user_model.ListArticles = _db.Articles.ToList();
-            return View(_article_user_model); //создано поле _article_user_model со списками User-ов и Article-ов
+            List<Article> articles = _db.Articles.ToList(); //выбираем из БД все новости
+            return View(articles);
+        }
 
+        [HttpPost]
+        public IActionResult ShowArticlesFromDBForAdmin(Guid id)//ИМЯ КАК В ASP-ROUTE-ID
+        {
+            //var articleFromDB = _db.Articles.FirstOrDefault(a => a.Id == articleId);
+            var articleFromDB = _db.Articles.Find(id);
+            if (articleFromDB != null)
+            {
+                _db.Articles.Remove(articleFromDB); // Удаляем выбранную статью
+                _db.SaveChanges(); // Сохраняем изменения в базе данных
+            }
+            return RedirectToAction("ShowArticlesFromDBForAdmin", "Display");
+ 
+        }
+
+        [HttpGet]
+        [Route("[controller]/[action]")] //для Swagger-а
+        public IActionResult ShowUsersFromDBForAdmin()
+        {
+            List<User> users = _db.Users.ToList(); //выбираем из БД все новости
+            return View(users);
+        }
+
+        [HttpPost]
+        [Route("[controller]/[action]")] //для Swagger-а
+        public IActionResult ShowUsersFromDBForAdmin(Guid userId)
+        {
+            var userFromDB = _db.Users.Find(userId);
+            if (userFromDB != null)
+            {
+                userFromDB.IsBlocked = !userFromDB.IsBlocked; // Переключаем статус блокировки
+                _db.SaveChanges(); // Сохраняем изменения в базе данных
+            }
+            return RedirectToAction("ShowUsersFromDBForAdmin", "Display");
         }
     }
 }
