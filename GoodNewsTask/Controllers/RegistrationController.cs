@@ -1,4 +1,5 @@
 ﻿using GoodNewsTask.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,20 +13,21 @@ namespace GoodNewsTask.Controllers
             _db = enteredContext;
         }
 
-        [HttpGet]
-        [AcceptVerbs("Get", "Post")] //ЭТО НАДО БУДЕТ СПРОСИТЬ КАК ДЕЛАТЬ ПРОВЕРКУ ПО СПИСКУ ПОЧТОВЫХ ЯЩИКОВ (см. https://metanit.com/sharp/aspnetmvc/9.3.php )
-        public IActionResult CheckEmail(string enteredEmail)
-        {
-            if (enteredEmail == "admin@mail.com")
-            {
-                return Json(false); //СПРОСИТЬ. Я очень сомневаюсь, что это нужно. Может надо return Context("Такой эл. ящик уже занят"); 
-            }
-            return Json(true);//СПРОСИТЬ. Вроде бы логично. Я не знаю, правильно ли так делать? Но мне надо вернуть из этого метода enteredEmail. 
+        //[HttpGet]
+        //[AcceptVerbs("Get", "Post")] //ЭТО НАДО БУДЕТ СПРОСИТЬ КАК ДЕЛАТЬ ПРОВЕРКУ ПО СПИСКУ ПОЧТОВЫХ ЯЩИКОВ (см. https://metanit.com/sharp/aspnetmvc/9.3.php )
+        //public IActionResult CheckEmail(string enteredEmail)
+        //{
+        //    if (enteredEmail == "admin@mail.com")
+        //    {
+        //        return Json(false); //СПРОСИТЬ. Я очень сомневаюсь, что это нужно. Может надо return Context("Такой эл. ящик уже занят"); 
+        //    }
+        //    return Json(true);//СПРОСИТЬ. Вроде бы логично. Я не знаю, правильно ли так делать? Но мне надо вернуть из этого метода enteredEmail. 
 
-        }
+        //}
 
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
+        [AllowAnonymous]
         public IActionResult Create()
         {
             //await Task.CompletedTask; так не надо делать
@@ -35,6 +37,7 @@ namespace GoodNewsTask.Controllers
 
         [HttpPost]
         [Route("[controller]/[action]")] //для Swagger-а
+        //[AllowAnonymous]
         public IActionResult Create(User enteredUser)
 		{
             if (string.IsNullOrEmpty(enteredUser.Login)) 

@@ -1,4 +1,5 @@
 ﻿using GoodNewsTask.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoodNewsTask.Controllers
@@ -17,6 +18,8 @@ namespace GoodNewsTask.Controllers
         }
 
         [HttpGet]
+        [Route("[controller]/[action]")] //для Swagger-а
+        [Authorize(Roles = "Admin")]
         public void Filtering()
         {
             List<Article> articles = _parserOnliner.ParseXmlForLinks("https://www.onliner.by/feed"); //Создан лист с новостями из Onliner.by

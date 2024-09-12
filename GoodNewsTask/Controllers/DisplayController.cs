@@ -3,6 +3,7 @@ using GoodNewsTask.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GoodNewsTask.Controllers
 {
@@ -15,19 +16,21 @@ namespace GoodNewsTask.Controllers
             _db = enteredContext;
         }
 
-        
+
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
+        [AllowAnonymous]
         public IActionResult ShowArticlesFromDBForGuests()
         {
             //подсказка https://zzzcode.ai/answer-question?id=2aaf2d19-b4d9-40f0-a9b0-0ebbaf119fca
             var articles = _db.Articles.ToList();
             return View(articles);
         }
-        
+
 
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
+        [Authorize(Roles = "User")]
         public IActionResult ShowArticlesFromDBForRegisteredUsers(Guid userId) //User registeredUserInfo
         {
             //см. https://metanit.com/sharp/aspnetmvc/2.7.php и https://metanit.com/sharp/aspnet5/8.5.php !!!
@@ -53,6 +56,7 @@ namespace GoodNewsTask.Controllers
 
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
+        [Authorize(Roles = "Admin")]
         public IActionResult ShowArticlesFromDBForAdmin()
         {
             List<Article> articles = _db.Articles.ToList(); //выбираем из БД все новости
@@ -60,6 +64,7 @@ namespace GoodNewsTask.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult ShowArticlesFromDBForAdmin(Guid id)//ИМЯ КАК В ASP-ROUTE-ID
         {
             //var articleFromDB = _db.Articles.FirstOrDefault(a => a.Id == articleId);
@@ -75,6 +80,7 @@ namespace GoodNewsTask.Controllers
 
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
+        [Authorize(Roles = "Admin")]
         public IActionResult ShowUsersFromDBForAdmin()
         {
             List<User> users = _db.Users.ToList(); //выбираем из БД все новости
@@ -83,6 +89,7 @@ namespace GoodNewsTask.Controllers
 
         [HttpPost]
         [Route("[controller]/[action]")] //для Swagger-а
+        [Authorize(Roles = "Admin")]
         public IActionResult ShowUsersFromDBForAdmin(Guid userId)
         {
             var userFromDB = _db.Users.Find(userId);

@@ -1,4 +1,5 @@
 using GoodNewsTask.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -16,11 +17,15 @@ namespace GoodNewsTask.Controllers
         }
 
         [HttpGet]
+        //[Route("[controller]/[action]")] //для Swagger-а не делай тут, иначе будет вход на locahost7000:Home/StatusCode/404
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
         [HttpGet]
+        [Route("[controller]/[action]")] //для Swagger-а
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
@@ -37,6 +42,7 @@ namespace GoodNewsTask.Controllers
 
         [HttpGet]
         [Route("~/StatusCodeError/{enteredStatusCode}")]
+        [AllowAnonymous]
         public IActionResult ErrorPage(int enteredStatusCode)
         {
             if (enteredStatusCode == 404)

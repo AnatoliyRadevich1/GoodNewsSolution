@@ -2,6 +2,7 @@ using GoodNewsTask.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,12 @@ builder.Services.AddSwaggerGen(c =>
 	});
 });
 
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+	options.MinimumSameSitePolicy=SameSiteMode.None;
+});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -52,6 +59,8 @@ app.UseSerilogRequestLogging();//добавление поддержки для логирования запросов с
 
 app.UseRouting();
 
+app.UseCookiePolicy();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
