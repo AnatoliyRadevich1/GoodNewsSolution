@@ -11,10 +11,33 @@ namespace GoodNewsTask.Controllers
     {
         private readonly NewsContext _db;
         public ArticleUser _article_user_model = null!; //скорее всего надо будет удалить
+
+        private const int PageSize = 10;//для пагинации (кол-во статей на странице)
+
         public DisplayController(NewsContext enteredContext)
         {
             _db = enteredContext;
         }
+
+        #region Тестовый код с пагинацией
+        [Route("[controller]/[action]")] //для Swagger-а
+        [AllowAnonymous]
+        public IActionResult ShowArticlesFromDBForGuestsWithPagination(int pageNumber = 1)
+        {
+            var totalArticles = _db.Articles.Count();
+            var articles = _db.Articles.Skip((pageNumber - 1)*PageSize)
+                                       .Take(PageSize)
+                                       .ToList();
+            ArticleListViewModel articleViewModel = new ArticleListViewModel()
+            {
+                Articles = articles,
+                CurrentPage = pageNumber,
+                TotalPages = (int)Math.Ceiling((double)totalArticles / PageSize)
+            };
+            return View(articleViewModel);
+        }
+        #endregion
+
 
 
         [HttpGet]
@@ -26,7 +49,6 @@ namespace GoodNewsTask.Controllers
             var articles = _db.Articles.ToList();
             return View(articles);
         }
-
 
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
