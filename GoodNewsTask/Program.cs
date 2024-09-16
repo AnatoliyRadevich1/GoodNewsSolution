@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Hangfire;
+using GoodNewsTask.Controllers;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +44,20 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 });
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
+
+//https://subbnet.ru/blogdetails/c47c57d2-c9c6-4b1e-b605-dc555f8d96ab тут HANGFIRE смотри
+
+//builder.Services.AddHangfire(configuration => configuration.UseSqlServerStorage("ConnectionStringForGoodNewsDB"));//Добавление HangFire
+//builder.Services.AddHangfireServer();//Добавление HangFire
+builder.Services.AddHangfire(conf => conf.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                                         .UseSimpleAssemblyNameTypeSerializer()
+                                         .UseRecommendedSerializerSettings()
+                                         .UseSqlServerStorage(builder.Configuration.GetConnectionString("ConnectionStringForGoodNewsDB")));
+builder.Services.AddHangfireServer();//Добавление HangFire
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -63,9 +80,22 @@ app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");//потом надо будет сменить
+app.UseHangfireDashboard();//Добавление HangFire Dashboard
+                           //подсказка с получением экземпляра DisplayController через DI https://zzzcode.ai/answer-question?id=78e93942-8106-4698-966e-6af27486637a
+                           //var serviceProvider = app.Services; // Получение экземпляра DisplayController через DI
+                           //var displayController = serviceProvider.GetRequiredService<DisplayController>(); // Получение экземпляра DisplayController через DI
+app.UseHangfireServer(); //Подключение к HangFire-серверу (см. таблицы HangFire в GoodNewsDB)
+
+//RecurringJob.AddOrUpdate("update-view-data",() => displayController.TestHangFireMethod(),Cron.Minutely);//периодическое выполнение задачи от HangFire
+
+//RecurringJob.AddOrUpdate("TestHangFireMethod1", () => Console.WriteLine($"Текущее время: {DateTime.Now.ToString("dd.MM.yyyy, HH:mm:ss")}"), Cron.Minutely);
+
+//RecurringJob.AddOrUpdate("filtering-job1", () => Console.WriteLine($"Текущее время: {DateTime.Now.ToString("dd.MM.yyyy, HH:mm:ss")}"), Cron.Minutely);
+
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");//потом надо будет сменить
 
 app.UseSwagger();
 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v3/swagger.json", "Показ API V3"); }); //localhost:XXXX/swagger/v3/swagger.json - ссылка на JSON-file экземпляра класса OpenApiInfo (см. его выше)

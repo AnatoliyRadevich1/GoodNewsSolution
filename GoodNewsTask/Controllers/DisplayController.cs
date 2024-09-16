@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
+using Hangfire;
 
 namespace GoodNewsTask.Controllers
 {
@@ -19,7 +20,27 @@ namespace GoodNewsTask.Controllers
             _db = enteredContext;
         }
 
-        #region Тестовый код с пагинацией
+        #region Код для HangFire
+        [HttpGet]
+        [Route("[controller]/[action]")]
+        public IActionResult TestHangFireMethod()
+        {
+            //подсказка есть, но толку мало https://zzzcode.ai/answer-question?id=167b3101-d5b1-4799-bda3-0378292615ed
+            
+            //RecurringJob.AddOrUpdate("TestHangFireMethod", () => Console.WriteLine($"Текущее время: {DateTime.Now.ToString("dd.MM.yyyy, HH:mm:ss")}"),Cron.Minutely);
+            //RecurringJob.AddOrUpdate("TestHangFireMethod2", () => View(), Cron.Minutely);
+
+
+            //вроде бы работает
+            //BackgroundJob.Enqueue(() => Console.WriteLine("ЭТО ТЕСТОВЫЙ ТЕКСТ"));
+            //Если принудительно запустить в Hangfire, то консоль покажет текст
+            //RecurringJob.AddOrUpdate(() => Console.WriteLine("ЭТО ТЕСТОВЫЙ ПОВТОРЯЮЩИЙСЯ ТЕКСТ"), Cron.Minutely);
+            RecurringJob.AddOrUpdate("myrecurringjob", () => Console.WriteLine("Любой текст!"), Cron.Minutely);
+            return Ok();
+        }
+        #endregion
+
+        #region Рабочий код с пагинацией
         [Route("[controller]/[action]")] //для Swagger-а
         [AllowAnonymous]
         public IActionResult ShowArticlesFromDBForGuestsWithPagination(int pageNumber = 1)
