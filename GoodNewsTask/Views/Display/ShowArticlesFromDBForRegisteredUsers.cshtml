@@ -1,4 +1,87 @@
-﻿@model ArticleUser
+﻿@model ArticleUserDTO
+<style>
+    /*Да, я так захотел сделать, а не через site.css. Например, через site.css сделан шрифт*/
+    table {
+        position: relative; /* Устанавливаем относительное позиционирование */
+        left: -15%; /* Сдвигаем таблицу влево на 15% */
+    }
+</style>
+@if (ViewData["UserNotFoundMessage"] != null)
+{
+    <div class="alert alert-danger">@ViewData["UserNotFoundMessage"]</div>
+}
+<h3><b>Приветствую тебя, пользователь @Model.ListUsers.First().Login</b></h3>
+<p><font color="#75ff33"><b>Выбранный уровень позитива: @Model.ListUsers.First().SelectedPositiveLevel</b></font></p>
+
+<form method="get" action="@Url.Action("ShowArticlesFromDBForRegisteredUsers")">
+    <input type="hidden" name="userId" value="@Model.ListUsers.First().Id" />
+    <input type="text" name="searchElement" placeholder="Введите текст ссылки" />
+
+    
+    <button type="submit">Поиск по ссылкам</button>
+</form>
+
+<h3>Список статей:</h3>
+
+@if (Model.ListArticles.Any())
+{
+    <div class="pagination">
+        @if (Model.CurrentPage > 1)
+        {
+            <a href="@Url.Action("ShowArticlesFromDBForRegisteredUsers", new {userId = Model.ListUsers.First().Id, pageNumber = (Model.CurrentPage - 1)})">Назад</a>
+        }
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            @if (i == Model.CurrentPage)
+            {
+                @* <b>@i</b> Тут можно побаловаться с оформлением текущей страницы*@
+                <a href="@Url.Action("ShowArticlesFromDBForRegisteredUsers", new {userId = Model.ListUsers.First().Id, pageNumber = i})" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+            }
+            else
+            {
+                <a href="@Url.Action("ShowArticlesFromDBForRegisteredUsers", new {userId = Model.ListUsers.First().Id, pageNumber = i})">@i</a>
+            }
+        }
+
+        @if (Model.CurrentPage < Model.TotalPages)
+        {
+            <a href="@Url.Action("ShowArticlesFromDBForRegisteredUsers", new {userId = Model.ListUsers.First().Id, pageNumber = (Model.CurrentPage + 1)})">Вперёд</a>
+        }
+    </div>
+    <br />
+
+    <table class="table table-bordered" align="center" width="100%">
+        <thead class="table-light">
+            <tr>
+                <th id="font-Montserrat" scope="col" valign="middle">Ссылки на статьи</th>
+                <th id="font-Montserrat" scope="col" valign="middle" style="width: 20%;">Текст</th>
+                <th id="font-Montserrat" scope="col" valign="middle">Изображение</th>
+                <th id="font-Montserrat" scope="col" valign="middle">Дата публикации</th>
+                <th id="font-Montserrat" scope="col" valign="middle">Уровень позитива</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var article in Model.ListArticles)
+            {
+                <tr>
+                    <td id="font-Montserrat" scope="row"><a href="@article.Title">@article.Title</a></td>
+                    <td id="font-Montserrat" scope="row" style="width: 20%;">@article.Text</td>
+                    <td id="font-Montserrat" scope="row"><img src="@article.Source" alt="Изображение статьи" style="width:350px; height:auto;" /></td>
+                    <td id="font-Montserrat" scope="row">@article.PublicationDate.ToString("dd.MM.yyyy H:mm")</td>
+                    <td id="font-Montserrat" scope="row">@article.PositiveLevel</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <p>Нет статей, соответствующих вашему уровню позитива.</p>
+}
+@*Начало старого кода без пагинации*@
+@* @model ArticleUser
 <style>
     /*Да, я так захотел сделать, а не через site.css. Например, через site.css сделан шрифт*/
     table {
@@ -43,7 +126,8 @@
 else
 {
     <p>Нет статей, соответствующих вашему уровню позитива.</p>
-}
+} *@
+@*Это начало справочно написанного кода*@
 @* @if (Model.ListArticles.Any())
 {
     <ul>
@@ -63,3 +147,5 @@ else
 {
     <p>Нет статей, соответствующих вашему уровню позитива.</p>
 } *@
+@*Это окончание справочно написанного кода*@
+@*Окончание старого кода без пагинации*@

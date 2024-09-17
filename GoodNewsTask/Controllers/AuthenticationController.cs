@@ -96,11 +96,20 @@ namespace GoodNewsTask.Controllers
 
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
-        [Authorize(Roles = "Admin,User")]
+        //[Authorize(Roles = "Admin,User")] //Если это оставить, то гостей будет перекидывать на страницу 404
         public async Task<IActionResult> Logout() //рекомендуемый асинхронный метод
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("InputLoginPassword", "Authentication");
+            var userRole  = HttpContext.User;
+            if (!userRole.IsInRole("Admin") && !userRole.IsInRole("User"))
+            {
+                return RedirectToAction("InputLoginPassword", "Authentication");
+            }
+            else
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return RedirectToAction("InputLoginPassword", "Authentication");
+            }
+            
         }
 
         //РАБОТАЕТ КОРРЕКТНО!!!

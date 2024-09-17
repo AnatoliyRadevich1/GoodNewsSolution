@@ -40,13 +40,19 @@ namespace GoodNewsTask.Controllers
         }
         #endregion
 
-        #region Рабочий код с пагинацией
+        [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
         [AllowAnonymous]
-        public IActionResult ShowArticlesFromDBForGuestsWithPagination(int pageNumber = 1)
+        public IActionResult ShowArticlesFromDBForGuests(int pageNumber = 1)
         {
+            #region Старый работающий код без пагинации при условии, что у метода не будет параметров
+            //подсказка https://zzzcode.ai/answer-question?id=2aaf2d19-b4d9-40f0-a9b0-0ebbaf119fca
+            //var articles = _db.Articles.ToList();
+            //return View(articles);
+            #endregion
+            #region Новый работающий код с пагинацией
             var totalArticles = _db.Articles.Count();
-            var articles = _db.Articles.Skip((pageNumber - 1)*PageSize)
+            var articles = _db.Articles.Skip((pageNumber - 1) * PageSize)
                                        .Take(PageSize)
                                        .ToList();
             ArticleListViewModel articleViewModel = new ArticleListViewModel()
@@ -56,46 +62,65 @@ namespace GoodNewsTask.Controllers
                 TotalPages = (int)Math.Ceiling((double)totalArticles / PageSize)
             };
             return View(articleViewModel);
-        }
-        #endregion
-
-
-
-        [HttpGet]
-        [Route("[controller]/[action]")] //для Swagger-а
-        [AllowAnonymous]
-        public IActionResult ShowArticlesFromDBForGuests()
-        {
-            //подсказка https://zzzcode.ai/answer-question?id=2aaf2d19-b4d9-40f0-a9b0-0ebbaf119fca
-            var articles = _db.Articles.ToList();
-            return View(articles);
+            #endregion
         }
 
+        
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
         [Authorize(Roles = "User")]
-        public IActionResult ShowArticlesFromDBForRegisteredUsers(Guid userId) //User registeredUserInfo
+        public IActionResult ShowArticlesFromDBForRegisteredUsers(Guid userId, int pageNumber = 1, string searchElement = "")
         {
-            //см. https://metanit.com/sharp/aspnetmvc/2.7.php и https://metanit.com/sharp/aspnet5/8.5.php !!!
-            //так делай https://zzzcode.ai/answer-question?id=fbc336bc-f05c-4c47-aca7-279f95749e70 !!!
+            #region Старый работающий код без пагинации при условии, что у метода будет один параметр Guid userId
+            ////см. https://metanit.com/sharp/aspnetmvc/2.7.php и https://metanit.com/sharp/aspnet5/8.5.php !!!
+            ////так делай https://zzzcode.ai/answer-question?id=fbc336bc-f05c-4c47-aca7-279f95749e70 !!!
+            //var selectedUser = _db.Users.FirstOrDefault(u => u.Id == userId);
+
+            //if (selectedUser == null)//До такого программа не пустит
+            //{
+            //    ViewData["UserNotFoundMessage"] = "Нет такого пользователя";
+            //    return View();
+            //}
+
+            //var articles = _db.Articles.Where(a => a.PositiveLevel >= selectedUser.SelectedPositiveLevel).ToList();// Получаем статьи, соответствующие уровню позитива пользователя
+
+            //ArticleUser articleUserModel = new ArticleUser // Создаем модель для передачи в представление
+            //{
+            //    ListArticles = articles,
+            //    ListUsers = new List<User> { selectedUser } // Передаем только текущего пользователя
+            //};
+            //return View(articleUserModel);
+            #endregion
+
             var selectedUser = _db.Users.FirstOrDefault(u => u.Id == userId);
-            
             if (selectedUser == null)//До такого программа не пустит
             {
                 ViewData["UserNotFoundMessage"] = "Нет такого пользователя";
                 return View();
             }
-            
             var articles = _db.Articles.Where(a => a.PositiveLevel >= selectedUser.SelectedPositiveLevel).ToList();// Получаем статьи, соответствующие уровню позитива пользователя
-
-            ArticleUser articleUserModel = new ArticleUser // Создаем модель для передачи в представление
+            if (!string.IsNullOrEmpty(searchElement))//для поиска данных по введённомупользователем тексту
             {
-                ListArticles = articles,
-                ListUsers = new List<User> { selectedUser } // Передаем только текущего пользователя
-            };
-            return View(articleUserModel);
+                articles = articles.Where(elem => elem.Title!.Contains(searchElement, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            var totalArticles = _db.Articles.Count();
+            var paginatedArticles = articles.Skip((pageNumber - 1) * PageSize)
+                                            .Take(PageSize)
+                                            .ToList();
 
+
+            ArticleUserDTO articleUserDTO = new ArticleUserDTO()
+            { 
+                ListArticles = paginatedArticles,
+                ListUsers = new List<User> { selectedUser },
+                CurrentPage = pageNumber,
+                TotalPages = (int)Math.Ceiling((double)totalArticles / PageSize)
+                //SearchElement = searchElement
+            };
+            return View(articleUserDTO);
         }
+
+
 
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
@@ -126,7 +151,7 @@ namespace GoodNewsTask.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult ShowUsersFromDBForAdmin()
         {
-            List<User> users = _db.Users.ToList(); //выбираем из БД все новости
+            List<User> users = _db.Users.ToList(); //выбираем из БД всех пользователей
             return View(users);
         }
 
