@@ -77,8 +77,8 @@ input.valid { /* отображение рамки с правильно введёнными данными*/
     display: flex; /* Используем Flexbox */
     justify-content: center; /* Центрируем кнопки по горизонтали */
     align-items: center; /* Центрируем кнопки по вертикали */
-    gap: 10px; /* Добавляем промежуток между кнопками */
-    margin: 20px 0; /* Добавляем отступы сверху и снизу */
+    /*gap: 10px;*/ /* Добавляем промежуток между кнопками */
+    /*margin: 20px 0;*/ /* Добавляем отступы сверху и снизу */
 }
 
 .button {
@@ -92,7 +92,7 @@ input.valid { /* отображение рамки с правильно введёнными данными*/
     border-radius: 9px; /*закруглённые углы*/
 }
 
-body { /*исходное оформление для body*/
+body { /*Исходное оформление для body. Да, я знаю,что можно поставить цвет как в dayMode, но я решил показать функциональность*/
     background-color: white;
     color: black;
 }
@@ -103,7 +103,7 @@ body { /*исходное оформление для body*/
 }
 
 .nightMode {
-    background-color: #010B13;
+    background-color: #46484a; /*На чёрном цвете (#010B13) плохо видны буквы логотипа*/
     color: white;
 }
 
@@ -130,13 +130,13 @@ body { /*исходное оформление для body*/
     }
 
 .buttonNightMode {
-    border: 2px solid #010B13;
-    color: #010B13;
+    border: 2px solid #46484a; /*#010B13*/
+    color: #46484a; /*#010B13*/
 }
 
     .buttonNightMode:hover {
         color: white;
-        background-color: #010B13;
+        background-color: #46484a; /*#010B13*/
         transition-duration: 0.9s;
     }
 
