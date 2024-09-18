@@ -21,11 +21,6 @@ body {
   margin-bottom: 60px;
 }
 
-
-
-
-
-
 /*Начало кода для оформления валидации (см. https://metanit.com/sharp/aspnetmvc/9.4.php )*/
 
 .field-validation-error { /*Отображение текста ошибки (см. <span> во View() )*/
@@ -72,7 +67,6 @@ input.valid { /* отображение рамки с правильно введёнными данными*/
 /*Окончание кода для стилизации пагинации*/
 
 /*Начало кода по работе с кнопками по изменению цветовой схемы*/
-
 .button-container {
     display: flex; /* Используем Flexbox */
     justify-content: center; /* Центрируем кнопки по горизонтали */
@@ -162,5 +156,37 @@ body { /*Исходное оформление для body. Да, я знаю,что можно поставить цвет как в
         transition-duration: 0.9s;
     }
 
-
 /*Окончание кода по работе с элементами страницы*/
+
+/*Начало кода оформления navbar-элементов*/
+.nav-link {
+    transition: background-color 0.9s ease;  Плавный переход цвета 
+}
+
+    .nav-link:hover {
+        background-color: #007bff;  Цвет фона при наведении 
+        color: white;  Цвет текста при наведении 
+    }
+/*Окончание кода оформления navbar-элементов*/
+
+/*Начало кода оформления navbar и navbar2*/
+.navbar-morning .navbar2-morning {
+    color: white;
+    background-color: #72f4d7;
+}
+
+.navbar-day .navbar2-day {
+    color: white;
+    background-color: #f5df4d;
+}
+
+.navbar-evening .navbar2-evening {
+    color: white;
+    background-color: #fa8128;
+}
+
+.navbar-night .navbar2-night {
+    color: white;
+    background-color: #46484a;
+}
+/*Окончание кода оформления navbar и navbar2*/

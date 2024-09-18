@@ -15,21 +15,29 @@ function selectMode(selectedByUserMode) { //функция выбора цвет
 
     if (selectedByUserMode) {
         document.body.classList.add(selectedByUserMode);
-    }//добавление (методом add()) выбранным пользователем режима и его запуск 
+    }//добавление (методом add()) выбранным пользователем режима и его запуск
 }
 
 //Реализация каждого цветового режима под каждую кнопку
 function morningModeToggle() {
-    selectMode("morningMode");
+    selectMode("morningMode");//для <body>
+    document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-morning"; //отдельно для элементов с id="navbar"
+    document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-morning"; //отдельно для элементов с id="navbar2"
 }
 
 function dayModeToggle() {
-    selectMode("dayMode");
+    selectMode("dayMode");//для <body>
+    document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-day"; //отдельно для элементов с id="navbar"
+    document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-day"; //отдельно для элементов с id="navbar2"
 }
 
 function eveningModeToggle() {
-    selectMode("eveningMode");
+    selectMode("eveningMode");//для <body>
+    document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-evening"; //отдельно для элементов с id="navbar"
+    document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-evening"; //отдельно для элементов с id="navbar2"
 }
 function nightModeToggle() {
-    selectMode("nightMode");
+    selectMode("nightMode");//для <body>
+    document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-night"; //отдельно для элементов с id="navbar"
+    document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-night"; //отдельно для элементов с id="navbar2"
 }
