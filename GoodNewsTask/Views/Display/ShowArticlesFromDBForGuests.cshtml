@@ -10,7 +10,7 @@
 <div class="pagination">
     @for (int i = 1; i <= Model.TotalPages; i++) @*Генерация ссылок на странице*@
     {
-        <a href="@Url.Action("ShowArticlesFromDBForGuestsWithPagination", new {pageNumber = i})" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+        <a href="@Url.Action("ShowArticlesFromDBForGuests", new {pageNumber = i})" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
     }
     @*
     href="@Url.Action("ShowArticlesFromDBForGuestsWithPagination", new {pageNumber = i})" - генерация URL для действий контроллера ShowArticlesFromDBForGuestsWithPagination,

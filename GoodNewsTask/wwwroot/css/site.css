@@ -21,6 +21,11 @@ body {
   margin-bottom: 60px;
 }
 
+
+
+
+
+
 /*Начало кода для оформления валидации (см. https://metanit.com/sharp/aspnetmvc/9.4.php )*/
 
 .field-validation-error { /*Отображение текста ошибки (см. <span> во View() )*/
@@ -65,3 +70,97 @@ input.valid { /* отображение рамки с правильно введёнными данными*/
     color: aliceblue;
 }
 /*Окончание кода для стилизации пагинации*/
+
+/*Начало кода по работе с кнопками по изменению цветовой схемы*/
+
+.button-container {
+    display: flex; /* Используем Flexbox */
+    justify-content: center; /* Центрируем кнопки по горизонтали */
+    align-items: center; /* Центрируем кнопки по вертикали */
+    gap: 10px; /* Добавляем промежуток между кнопками */
+    margin: 20px 0; /* Добавляем отступы сверху и снизу */
+}
+
+.button {
+    width: 200px;
+    height: 75px;
+    background-color: white;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    margin: 4px 4px 4px 4px;
+    border-radius: 9px; /*закруглённые углы*/
+}
+
+body { /*исходное оформление для body*/
+    background-color: white;
+    color: black;
+}
+
+.dayMode {
+    background-color: #f5df4d;
+    color: black;
+}
+
+.nightMode {
+    background-color: #010B13;
+    color: white;
+}
+
+.eveningMode {
+    background-color: #fa8128;
+    color: darkgray;
+}
+
+.morningMode {
+    background-color: #72f4d7;
+    color: darkblue;
+}
+/*см. про кнопки https://html5css.ru/css/css3_buttons.php */
+/*см. про ВОЗМОЖНОСТЬ реализации onclick в CSS https://www.geeksforgeeks.org/how-to-add-onclick-effect-using-css/ Тут будет реализация через HTML*/
+.buttonDayMode {
+    border: 2px solid #f5df4d;
+    color: #f5df4d;
+}
+
+    .buttonDayMode:hover {
+        color: white;
+        background-color: #f5df4d;
+        transition-duration: 0.9s;
+    }
+
+.buttonNightMode {
+    border: 2px solid #010B13;
+    color: #010B13;
+}
+
+    .buttonNightMode:hover {
+        color: white;
+        background-color: #010B13;
+        transition-duration: 0.9s;
+    }
+
+.buttonEveningMode {
+    border: 2px solid #fa8128;
+    color: #fa8128;
+}
+
+    .buttonEveningMode:hover {
+        color: white;
+        background-color: #fa8128;
+        transition-duration: 0.9s;
+    }
+
+.buttonMorningMode {
+    border: 2px solid #72f4d7;
+    color: #72f4d7;
+}
+
+    .buttonMorningMode:hover {
+        color: white;
+        background-color: #72f4d7;
+        transition-duration: 0.9s;
+    }
+
+
+/*Окончание кода по работе с элементами страницы*/
