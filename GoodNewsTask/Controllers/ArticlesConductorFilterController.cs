@@ -20,7 +20,7 @@ namespace GoodNewsTask.Controllers
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
         [Authorize(Roles = "Admin")]
-        public void Filtering()
+        public void Filtering()//ожидай появления пустой страницы после выполнения работы!!!
         {
             List<Article> articles = _parserOnliner.ParseXmlForLinks("https://www.onliner.by/feed"); //Создан лист с новостями из Onliner.by
             articles.AddRange(_parserLenta.ParseXmlForLinks("https://lenta.ru/rss/articles")); //Добавляем лист с новостями из Lenta.ru

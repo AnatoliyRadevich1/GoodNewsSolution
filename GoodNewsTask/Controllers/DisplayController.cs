@@ -23,7 +23,7 @@ namespace GoodNewsTask.Controllers
         #region Код для HangFire
         [HttpGet]
         [Route("[controller]/[action]")]
-        public IActionResult TestHangFireMethod()
+        public IActionResult TestHangFireMethod()//при входе сюда запускается цикличное действие
         {
             //подсказка есть, но толку мало https://zzzcode.ai/answer-question?id=167b3101-d5b1-4799-bda3-0378292615ed
             
@@ -35,7 +35,7 @@ namespace GoodNewsTask.Controllers
             //BackgroundJob.Enqueue(() => Console.WriteLine("ЭТО ТЕСТОВЫЙ ТЕКСТ"));
             //Если принудительно запустить в Hangfire, то консоль покажет текст
             //RecurringJob.AddOrUpdate(() => Console.WriteLine("ЭТО ТЕСТОВЫЙ ПОВТОРЯЮЩИЙСЯ ТЕКСТ"), Cron.Minutely);
-            RecurringJob.AddOrUpdate("myrecurringjob", () => Console.WriteLine("Любой текст!"), Cron.Minutely);
+            RecurringJob.AddOrUpdate("myrecurringjob", () => Console.WriteLine("Выполнение регулярного действия от HangFire!"), Cron.Minutely);
             return Ok();
         }
         #endregion
