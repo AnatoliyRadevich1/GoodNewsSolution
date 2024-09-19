@@ -99,7 +99,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");//потом надо будет сменить
 
-app.UseMiddleware<SwaggerAuthorizationMiddleware>(); //ВЫДАЁТ ОШИБКУ!!!
+app.UseMiddleware<SwaggerAuthorizationMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v3/swagger.json", "Показ API V3"); }); //localhost:XXXX/swagger/v3/swagger.json - ссылка на JSON-file экземпляра класса OpenApiInfo (см. его выше)
 
