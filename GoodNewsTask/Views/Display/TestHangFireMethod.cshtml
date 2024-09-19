@@ -1,3 +1,8 @@
-﻿<p>Это тестовый View() для проверки работы HangFire</p>
-<p>Время обновления: @DateTime.Now.ToString("dd.MM.yyyy, HH:mm:ss")</p>
-<p>Смотри консоль</p>
+﻿<marquee>Зафиксированное время запуска: @DateTime.Now.ToString("dd.MM.yyyy, HH:mm:ss")</marquee>
+<marquee direction="down"
+         width="250"
+         height="200"
+         behavior="alternate"
+         style="border:solid">
+    <marquee behavior="alternate">Сейчас запущен HangFire</marquee>
+</marquee>
