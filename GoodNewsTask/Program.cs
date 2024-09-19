@@ -27,7 +27,6 @@ builder.Services.AddDbContext<NewsContext>(options => options.UseSqlServer(conne
 
 builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));//установка поддержки логирования Serilog-ом
 
-builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
 {
 	c.SwaggerDoc("v3", new OpenApiInfo
@@ -55,7 +54,10 @@ builder.Services.AddHangfire(conf => conf.SetDataCompatibilityLevel(Compatibilit
                                          .UseSqlServerStorage(builder.Configuration.GetConnectionString("ConnectionStringForGoodNewsDB")));
 builder.Services.AddHangfireServer();//Добавление HangFire
 
-
+/*AUTOMAPPER УДАЛЁН ЗА НЕНАДОБНОСТЬЮ!!! Потому что у меня всего одна модель ArticleUser (для ArticleUserDTO). А в них находятся две коллекции List<>. ArticleUserDTO используется для пагинации:
+ для подсчёта количества новостных статей. Собсвенно, тут нечего прятать и нет никакого смысла ради пагинации ставить целую библиотеку. А вот использовать для пагинации ArticleUserDTO вместо 
+ ArticleUser смысл есть,потому что для пагинации ArticleUserDTO обладаебОльшим количесвом свойств внутри себя
+*/
 
 
 var app = builder.Build();
@@ -93,10 +95,11 @@ app.UseHangfireServer(); //Подключение к HangFire-серверу (см. таблицы HangFire 
 //RecurringJob.AddOrUpdate("filtering-job1", () => Console.WriteLine($"Текущее время: {DateTime.Now.ToString("dd.MM.yyyy, HH:mm:ss")}"), Cron.Minutely);
 
 
-    app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");//потом надо будет сменить
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");//потом надо будет сменить
 
+app.UseMiddleware<SwaggerAuthorizationMiddleware>(); //ВЫДАЁТ ОШИБКУ!!!
 app.UseSwagger();
 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v3/swagger.json", "Показ API V3"); }); //localhost:XXXX/swagger/v3/swagger.json - ссылка на JSON-file экземпляра класса OpenApiInfo (см. его выше)
 
