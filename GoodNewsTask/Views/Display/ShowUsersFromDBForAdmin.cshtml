@@ -9,6 +9,14 @@
     }
 </style>
 <h3>Список пользователей:</h3>
+<form method="get" action="@Url.Action("ShowUsersFromDBForAdmin")">
+    <input type="hidden" name="userId" value="@Model.First().Id" />
+    <input type="text" name="searchUser" placeholder="Введите текст ссылки" />
+
+
+    <button class="btn btn-primary" type="submit">Поиск по логинам</button>
+</form>
+
 <table class="table table-bordered" align="center" width="100%">
     <thead class="table-light">
         <tr>

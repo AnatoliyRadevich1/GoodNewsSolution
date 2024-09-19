@@ -137,9 +137,15 @@ namespace GoodNewsTask.Controllers
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
         [Authorize(Roles = "Admin")]
-        public IActionResult ShowUsersFromDBForAdmin()
+        public IActionResult ShowUsersFromDBForAdmin(string searchUser = "")
         {
             List<User> users = _db.Users.ToList(); //выбираем из БД всех пользователей
+
+
+            if (!string.IsNullOrEmpty(searchUser))//для поиска данных по введённому пользователем тексту
+            {
+                users = users.Where(elem => elem.Login!.Contains(searchUser, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
             return View(users);
         }
 
