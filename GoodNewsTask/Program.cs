@@ -104,7 +104,7 @@ app.UseSession(); //ƒобавление сессии !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");//потом надо будет сменить
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.UseMiddleware<SwaggerAuthorizationMiddleware>();
 app.UseSwagger();

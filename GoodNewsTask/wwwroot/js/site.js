@@ -54,3 +54,22 @@ function nightModeToggle() {
     document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-night border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar"
     document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-night border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar2"
 }
+
+
+//Реализация аналоговых часов
+function updateAnalogClock() //работает
+{
+    let hours = new Date().getHours();
+    let minutes = new Date().getMinutes();
+    let seconds = new Date().getSeconds();
+    //повороты стрелок
+    let hours_rotation = 30 * hours + 0.5 * minutes;//30 градусов за час + 0,5 градуса за минуту
+    let minutes_rotation = 6 * minutes;//6 градусов за минуту
+    let seconds_rotation = 6 * seconds;//6 градусов за секунду
+    //вращение элементов (см. https://www.w3schools.com/jsref/prop_style_transform.asp )
+    arrowHours.style.transform = `rotate(${hours_rotation}deg)`;
+    arrowMinutes.style.transform = `rotate(${minutes_rotation}deg)`;
+    arrowSeconds.style.transform = `rotate(${seconds_rotation}deg)`;
+}
+updateAnalogClock();
+setInterval(updateAnalogClock, 1000);

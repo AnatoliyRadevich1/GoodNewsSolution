@@ -196,3 +196,119 @@ body { /*Исходное оформление для body. Да, я знаю,что можно поставить цвет как в
 }
 /*Окончание кода оформления navbar и navbar2*/
 
+/*Начало кода по оформлению аналоговых часов*/
+
+#analogClockBox {
+    border-radius: 50%;
+    position: relative;
+    margin: auto;
+    height: 70vh;
+    width: 70vh;
+    background-color: #00e64c;
+    border: 0.5vw solid #ffe561;
+    /*для дочерних элементов*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.numbers {
+    position: absolute;
+    margin: auto;
+    font-family: Bahnschrift;
+    font-size: 48px;
+    color: #2764f1;
+}
+
+#number01 {
+    transform: translate(15.5vh, -26.847vh) rotate(30deg);
+}
+
+#number02 {
+    transform: translate(26.847vh, -15.5vh) rotate(60deg);
+}
+
+#number03 {
+    transform: translate(31vh, -0vh) rotate(90deg);
+}
+
+#number04 {
+    transform: translate(26.847vh, 15.5vh) rotate(120deg);
+}
+
+#number05 {
+    transform: translate(15.5vh, 26.847vh) rotate(150deg);
+}
+
+#number06 {
+    transform: translate(-0vh, 31vh) rotate(180deg);
+}
+
+#number07 {
+    transform: translate(-15.5vh, 26.847vh) rotate(210deg);
+}
+
+#number08 {
+    transform: translate(-26.847vh, 15.5vh) rotate(240deg);
+}
+
+#number09 {
+    transform: translate(-31vh, -0vh) rotate(270deg);
+}
+
+#number10 {
+    transform: translate(-26.847vh, -15.5vh) rotate(300deg);
+}
+
+#number11 {
+    transform: translate(-15.5vh, -26.847vh) rotate(330deg);
+}
+
+#number12 {
+    transform: translate(0vh, -31vh) rotate(360deg);
+}
+
+.arrows {
+    position: absolute;
+}
+
+#arrowHours {
+    height: 15vh;
+    width: 0.4vh;
+    background-color: #f6f16a;
+    z-index: 1;
+    transform-origin: 50% 90%;
+    bottom: 32.4vh; /*подбирал зрительно*/
+    /*По горизонтали уже было отцентрировано ранее командой transform-origin: 50%;*/
+}
+
+#arrowMinutes {
+    height: 20vh;
+    width: 0.3vh;
+    background-color: #f6f16a;
+    z-index: 2;
+    transform-origin: 50% 90%; /**/
+    bottom: 31.90vh; /*подбирал зрительно*/
+    /*По горизонтали уже было отцентрировано ранее командой transform-origin: 50%;*/
+}
+
+#arrowSeconds {
+    height: 25vh;
+    width: 0.2vh;
+    background-color: #94f66a;
+    z-index: 3;
+    transform-origin: 50% 90%;
+    bottom: 31.58vh; /*подбирал зрительно*/
+    /*По горизонтали уже было отцентрировано ранее командой transform-origin: 50%;*/
+}
+
+#centralHolderOfArrows {
+    position: absolute;
+    border-radius: 50%;
+    background-color: #2764f1;
+    height: 2vh;
+    width: 2vh;
+    z-index: 4;
+}
+
+/*Окончание кода по оформлению аналоговых часов*/
