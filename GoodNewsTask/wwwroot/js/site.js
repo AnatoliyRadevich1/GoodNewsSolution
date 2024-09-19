@@ -34,23 +34,23 @@ document.addEventListener('DOMContentLoaded', (event) => { //ПРОВЕРЯЮ, �
 function morningModeToggle() {
     selectMode("morningMode");//для <body> 
     
-    //document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-morning border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar"
-    //document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-morning border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar2"
+    document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-morning border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar"
+    document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-morning border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar2"
 }
 
 function dayModeToggle() {
     selectMode("dayMode");//для <body>
-    //document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-day border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar"
-    //document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-day border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar2"
+    document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-day border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar"
+    document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-day border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar2"
 }
 
 function eveningModeToggle() {
     selectMode("eveningMode");//для <body>
-    //document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-evening border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar"
-    //document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-evening border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar2"
+    document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-evening border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar"
+    document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-evening border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar2"
 }
 function nightModeToggle() {
     selectMode("nightMode");//для <body>
-    //document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-night border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar"
-    //document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-night border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar2"
+    document.getElementById("navbar").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-night border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar"
+    document.getElementById("navbar2").className = "navbar navbar-expand-sm navbar-toggleable-sm navbar-night border-bottom box-shadow mb-3"; //отдельно для элементов с id="navbar2"
 }
