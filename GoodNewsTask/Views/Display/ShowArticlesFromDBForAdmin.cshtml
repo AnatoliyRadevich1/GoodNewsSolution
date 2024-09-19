@@ -34,7 +34,7 @@
                 <td>
                     @* <form asp-action="ShowArticlesFromDBForAdmin" asp-controller="Display" asp-route-id="@article.Id" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить эту статью?');"> *@
                     <form asp-action="ShowArticlesFromDBForAdmin" asp-controller="Display" method="post">
-                        <input name="id" type="hidden" value="@article.Id" /> @*так надо передавать данные name ="id" - название парамера в методе*@
+                        <input name="id" type="hidden" value="@article.Id" /> @*ИМЕННО ТАК надо передавать данные name ="id" - название парамера в методе*@
                         <button type="submit" class="btn btn-danger">Удалить</button>
                     </form>
                 </td>

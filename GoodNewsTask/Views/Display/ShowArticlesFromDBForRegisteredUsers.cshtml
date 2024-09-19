@@ -10,12 +10,17 @@
 {
     <div class="alert alert-danger">@ViewData["UserNotFoundMessage"]</div>
 }
-
-<h3><b>Приветствую тебя, пользователь @Model.ListUsers.First().Login</b></h3>
-<p><font color="#75ff33"><b>Выбранный уровень позитива: @Model.ListUsers.First().SelectedPositiveLevel</b></font></p>
-
+@if (Model.ListUsers != null && Model.ListUsers.Any())
+{
+    <h3><b>Приветствую тебя, пользователь @Model.ListUsers.First().Login</b></h3>
+    <p><font color="#75ff33"><b>Выбранный уровень позитива: @Model.ListUsers.First().SelectedPositiveLevel</b></font></p>
+}
+else @*До этого не дойдёт.*@
+{
+    <div class="alert alert-danger">Пользователь не найден.</div>
+}
 <form method="get" action="@Url.Action("ShowArticlesFromDBForRegisteredUsers")">
-    <input type="hidden" name="userId" value="@Model.ListUsers.First().Id" />
+    <input type="hidden" name="userId" value="@Model.ListUsers!.First().Id" />
     <input type="text" name="searchElement" placeholder="Введите текст ссылки" />
 
     
@@ -36,7 +41,7 @@
         {
             @if (i == Model.CurrentPage)
             {
-                @* <b>@i</b> Тут можно побаловаться с оформлением текущей страницы*@
+                @* <b>@i</b> Тут можно побаловаться с оформлением текущего номера страницы пагинации*@
                 <a href="@Url.Action("ShowArticlesFromDBForRegisteredUsers", new {userId = Model.ListUsers.First().Id, pageNumber = i})" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
             }
             else
