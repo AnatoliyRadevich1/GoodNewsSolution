@@ -28,13 +28,14 @@ namespace GoodNewsTask.Controllers
         {
             return View();
         }
-        //РАБОТАЕТ КОРРЕКТНО!!! НО СЮДА НАДО БУДЕТ ДОБАВИТЬ РАБОТУ С АДМИНИСТРАТОРОМ
+        //РАБОТАЕТ КОРРЕКТНО!!!
         [HttpPost]
         [Route("[controller]/[action]")] //для Swagger-а
         //[AllowAnonymous]
         public IActionResult InputLoginPassword([FromForm] User enteredUser)
         {
             var queryUserFromDB = _db.Users.FirstOrDefault(user => user.Login == enteredUser.Login && user.Password == enteredUser.Password);//Поиск пользователя по логину и паролю
+
             #region Вставка для входа админом
             ClaimsIdentity identity = null!;
             if (queryUserFromDB!.Login == "Admin" && queryUserFromDB.Password == "1000" && queryUserFromDB.IsBlocked == false)
@@ -66,6 +67,7 @@ namespace GoodNewsTask.Controllers
                 _isCorrectLoginAndPassword = true;
                 var principal = new ClaimsPrincipal(identity);
                 var login = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                HttpContext.Session.SetString("UserId", queryUserFromDB.Id.ToString()); //СЕССИЯ, НО ЧЕРЕЗ ID ПОЛЬЗОВАТЕЛЯ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "Display", new { userId = queryUserFromDB.Id });
                 #endregion
                 //return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "Display", new { enteredPositiveLevel = queryUserFromDB.SelectedPositiveLevel });
@@ -80,8 +82,7 @@ namespace GoodNewsTask.Controllers
                 //Console.ResetColor();
                 //return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "Display", new { enteredPositiveLevel = queryUserFromDB.SelectedPositiveLevel });
                 #endregion
-                /*По состоянию на 03.09.2024 у тебя есть в TestSolution->TaslAuth код, где реализованы [AllowAnonymous], 
-                [Authorize(Roles="Admin, User")],[Authorize(Roles="Admin")]. Вот прямо вместо этого коммментария можно оттуда добавить тот код*/
+
                 //см. https://metanit.com/sharp/aspnetmvc/2.7.php и https://metanit.com/sharp/aspnet5/8.5.php !!!
             }
             else
@@ -107,6 +108,7 @@ namespace GoodNewsTask.Controllers
             else
             {
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                HttpContext.Session.Clear(); //ОЧИСТКА СЕССИИ (УДАЛЯЕМ ВСЕ ДАННЫЕ) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 return RedirectToAction("InputLoginPassword", "Authentication");
             }
             

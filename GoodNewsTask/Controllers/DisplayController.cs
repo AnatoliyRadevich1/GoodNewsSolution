@@ -69,29 +69,14 @@ namespace GoodNewsTask.Controllers
         [HttpGet]
         [Route("[controller]/[action]")] //для Swagger-а
         [Authorize(Roles = "User")]
-        public IActionResult ShowArticlesFromDBForRegisteredUsers(Guid userId, int pageNumber = 1, string searchElement = "")
+        public IActionResult ShowArticlesFromDBForRegisteredUsers(/*Guid userId, */int pageNumber = 1, string searchElement = "")
         {
-            #region Старый работающий код без пагинации при условии, что у метода будет один параметр Guid userId
-            ////см. https://metanit.com/sharp/aspnetmvc/2.7.php и https://metanit.com/sharp/aspnet5/8.5.php !!!
-            ////так делай https://zzzcode.ai/answer-question?id=fbc336bc-f05c-4c47-aca7-279f95749e70 !!!
-            //var selectedUser = _db.Users.FirstOrDefault(u => u.Id == userId);
-
-            //if (selectedUser == null)//До такого программа не пустит
-            //{
-            //    ViewData["UserNotFoundMessage"] = "Нет такого пользователя";
-            //    return View();
-            //}
-
-            //var articles = _db.Articles.Where(a => a.PositiveLevel >= selectedUser.SelectedPositiveLevel).ToList();// Получаем статьи, соответствующие уровню позитива пользователя
-
-            //ArticleUser articleUserModel = new ArticleUser // Создаем модель для передачи в представление
-            //{
-            //    ListArticles = articles,
-            //    ListUsers = new List<User> { selectedUser } // Передаем только текущего пользователя
-            //};
-            //return View(articleUserModel);
-            #endregion
-
+            var userIdString = HttpContext.Session.GetString("UserId"); //реализация из сессии id пользователя
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
+            {
+                ViewData["UserNotFoundMessage"] = "Нет такого пользователя";
+                return RedirectToAction("InputLoginPassword", "Authentication"); //закрыл баг при отсутствующем id
+            }
             var selectedUser = _db.Users.FirstOrDefault(u => u.Id == userId);
             if (selectedUser == null)//До такого программа не пустит, а пользователь вполне себе может такое сделать
             {
@@ -100,7 +85,7 @@ namespace GoodNewsTask.Controllers
 
             }
             var articles = _db.Articles.Where(a => a.PositiveLevel >= selectedUser.SelectedPositiveLevel).ToList();// Получаем статьи, соответствующие уровню позитива пользователя
-            if (!string.IsNullOrEmpty(searchElement))//для поиска данных по введённомупользователем тексту
+            if (!string.IsNullOrEmpty(searchElement))//для поиска данных по введённому пользователем тексту
             {
                 articles = articles.Where(elem => elem.Title!.Contains(searchElement, StringComparison.OrdinalIgnoreCase)).ToList();
             }

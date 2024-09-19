@@ -103,7 +103,7 @@ body { /*Исходное оформление для body. Да, я знаю,что можно поставить цвет как в
 
 .eveningMode {
     background-color: #fa8128;
-    color: darkgray;
+    color: black; /*На цвете #fa8128 плохо видны буквы с цветом darkgray*/
 }
 
 .morningMode {
@@ -160,16 +160,21 @@ body { /*Исходное оформление для body. Да, я знаю,что можно поставить цвет как в
 
 /*Начало кода оформления navbar-элементов*/
 .nav-link {
-    transition: background-color 0.9s ease;  Плавный переход цвета 
+    transition: background-color 0.9s ease;  /*Плавный переход цвета */
 }
 
     .nav-link:hover {
-        background-color: #007bff;  Цвет фона при наведении 
-        color: white;  Цвет текста при наведении 
+        background-color: #007bff;  /*Цвет фона при наведении */
+        color: white;  /*Цвет текста при наведении */
     }
 /*Окончание кода оформления navbar-элементов*/
 
 /*Начало кода оформления navbar и navbar2*/
+#navbar, #navbar2 {
+    border: 0;
+    margin: 0;
+}
+
 .navbar-morning .navbar2-morning {
     color: white;
     background-color: #72f4d7;
@@ -190,3 +195,4 @@ body { /*Исходное оформление для body. Да, я знаю,что можно поставить цвет как в
     background-color: #46484a;
 }
 /*Окончание кода оформления navbar и navbar2*/
+

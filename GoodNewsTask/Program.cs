@@ -27,6 +27,12 @@ builder.Services.AddDbContext<NewsContext>(options => options.UseSqlServer(conne
 
 builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));//установка поддержки логирования Serilog-ом
 
+builder.Services.AddSession(options => //Добавление сессии !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60); //Время сессии 60 минут
+    options.Cookie.HttpOnly = true; //Защита от JS
+    options.Cookie.IsEssential = true; //Обязательная кука
+});
 builder.Services.AddSwaggerGen(c =>
 {
 	c.SwaggerDoc("v3", new OpenApiInfo
@@ -94,6 +100,7 @@ app.UseHangfireServer(); //Подключение к HangFire-серверу (см. таблицы HangFire 
 
 //RecurringJob.AddOrUpdate("filtering-job1", () => Console.WriteLine($"Текущее время: {DateTime.Now.ToString("dd.MM.yyyy, HH:mm:ss")}"), Cron.Minutely);
 
+app.UseSession(); //Добавление сессии !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 app.MapControllerRoute(
     name: "default",
