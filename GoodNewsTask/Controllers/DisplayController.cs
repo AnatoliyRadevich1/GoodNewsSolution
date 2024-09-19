@@ -26,16 +26,6 @@ namespace GoodNewsTask.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult TestHangFireMethod()//при входе сюда запускается цикличное действие
         {
-            //подсказка есть, но толку мало https://zzzcode.ai/answer-question?id=167b3101-d5b1-4799-bda3-0378292615ed
-            
-            //RecurringJob.AddOrUpdate("TestHangFireMethod", () => Console.WriteLine($"Текущее время: {DateTime.Now.ToString("dd.MM.yyyy, HH:mm:ss")}"),Cron.Minutely);
-            //RecurringJob.AddOrUpdate("TestHangFireMethod2", () => View(), Cron.Minutely);
-
-
-            //вроде бы работает
-            //BackgroundJob.Enqueue(() => Console.WriteLine("ЭТО ТЕСТОВЫЙ ТЕКСТ"));
-            //Если принудительно запустить в Hangfire, то консоль покажет текст
-            //RecurringJob.AddOrUpdate(() => Console.WriteLine("ЭТО ТЕСТОВЫЙ ПОВТОРЯЮЩИЙСЯ ТЕКСТ"), Cron.Minutely);
             RecurringJob.AddOrUpdate("myrecurringjob", () => Console.WriteLine($"Количество пользователей = {_db.Users.Count()}, количество новостных статей = {_db.Articles.Count()}"), Cron.Minutely);
 
             return View();
@@ -139,8 +129,8 @@ namespace GoodNewsTask.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult ShowUsersFromDBForAdmin(string searchUser = "")
         {
-            List<User> users = _db.Users.ToList(); //выбираем из БД всех пользователей
 
+            List<User> users = _db.Users.ToList(); //выбираем из БД всех пользователей
 
             if (!string.IsNullOrEmpty(searchUser))//для поиска данных по введённому пользователем тексту
             {
@@ -154,6 +144,7 @@ namespace GoodNewsTask.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult ShowUsersFromDBForAdmin(Guid userId)
         {
+
             var userFromDB = _db.Users.Find(userId);
             if (userFromDB != null)
             {
