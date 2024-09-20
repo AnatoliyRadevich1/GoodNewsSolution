@@ -41,6 +41,10 @@ else
         <tbody>
             @foreach (var user in Model)
             {
+                if (user.Login == "Admin")
+                {     
+                    continue; //Пропускаем пользователя с логином Admin
+                }
                 <tr>
                     <td id="font-Montserrat" scope="row">@user.Id</td>
                     <td id="font-Montserrat" scope="row">@user.Login</td>
