@@ -35,9 +35,16 @@ namespace GoodNewsTask.Controllers
         public IActionResult InputLoginPassword([FromForm] User enteredUser)
         {
             var queryUserFromDB = _db.Users.FirstOrDefault(user => user.Login == enteredUser.Login && user.Password == enteredUser.Password);//Поиск пользователя по логину и паролю
+            
+            if (queryUserFromDB == null) /*Обработка исключений при неправильном логине либо пароле*/
+            {
+                ViewBag.FailedAuthentificationMessage = "Пользователь заблокирован либо он написал неверную комбинацию логина и пароля";
+                return View("InputLoginPassword", enteredUser); // Возвращаем представление с моделью
+            }
 
             #region Вставка для входа админом
             ClaimsIdentity identity = null!;
+
             if (queryUserFromDB!.Login == "Admin" && queryUserFromDB.Password == "1000" && queryUserFromDB.IsBlocked == false)
             {
                 isAuthenticate = false;
@@ -50,7 +57,7 @@ namespace GoodNewsTask.Controllers
                 _isCorrectLoginAndPassword = true;
                 var principal = new ClaimsPrincipal(identity);
                 var login = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                return RedirectToAction("ShowArticlesFromDBForAdmin", "Display", new { userId = queryUserFromDB.Id });
+                return RedirectToAction("ShowArticlesFromDBForAdmin", "Display"/*, new { userId = queryUserFromDB.Id }*/);
             }
             #endregion
             if (queryUserFromDB != null && queryUserFromDB.Login !="Admin" && queryUserFromDB.IsBlocked == false)
@@ -68,7 +75,8 @@ namespace GoodNewsTask.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 var login = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 HttpContext.Session.SetString("UserId", queryUserFromDB.Id.ToString()); //СЕССИЯ, НО ЧЕРЕЗ ID ПОЛЬЗОВАТЕЛЯ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "Display", new { userId = queryUserFromDB.Id });
+                return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "Display");
+                //return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "Display", new { userId = queryUserFromDB.Id }); //Если так оставить, то в браузерной строке пропишется userId
                 #endregion
                 //return RedirectToAction("ShowArticlesFromDBForRegisteredUsers", "Display", new { enteredPositiveLevel = queryUserFromDB.SelectedPositiveLevel });
                 // подсказка с передачей переменной https://zzzcode.ai/answer-question?id=8999dede-0adf-4a8b-afcb-f0d969178b35

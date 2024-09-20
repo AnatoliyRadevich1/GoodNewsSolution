@@ -136,6 +136,10 @@ namespace GoodNewsTask.Controllers
             {
                 users = users.Where(elem => elem.Login!.Contains(searchUser, StringComparison.OrdinalIgnoreCase)).ToList();
             }
+            if (!users.Any())
+            {
+                users = new List<User>();
+            }
             return View(users);
         }
 
