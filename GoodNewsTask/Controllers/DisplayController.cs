@@ -81,7 +81,8 @@ namespace GoodNewsTask.Controllers
             {
                 articles = articles.Where(elem => elem.Title!.Contains(searchElement, StringComparison.OrdinalIgnoreCase)).ToList();
             }
-            var totalArticles = _db.Articles.Count();
+            //var totalArticles = _db.Articles.Count(); //тут общее количество ВСЕХ новостных статей из БД посчиано
+            var totalArticles = articles.Count();
             var paginatedArticles = articles.Skip((pageNumber - 1) * PageSize)
                                             .Take(PageSize)
                                             .ToList();

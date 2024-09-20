@@ -80,7 +80,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseStatusCodePagesWithRedirects("~/StatusCodeError/{0}"); //переадресация на несуществующие страницы
-app.UseSerilogRequestLogging();//добавление поддержки для логирования запросов с использрованием Serilog-а
+app.UseSerilogRequestLogging();//добавление поддержки для логирования запросов с использованием Serilog-а
 
 app.UseRouting();
 
