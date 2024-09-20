@@ -32,7 +32,7 @@ else @*До этого не дойдёт.*@
     <div class="pagination">
         @if (Model.CurrentPage > 1)
         {
-            <a href="@Url.Action("ShowArticlesFromDBForRegisteredUsers", new {userId = Model.ListUsers!.First().Id, pageNumber = (Model.CurrentPage - 1)})">Назад</a>
+            <a href="@Url.Action("ShowArticlesFromDBForRegisteredUsers", new {pageNumber = (Model.CurrentPage - 1)})">Назад</a>
         }
 
         @for (int i = 1; i <= Model.TotalPages; i++)
@@ -61,7 +61,7 @@ else @*До этого не дойдёт.*@
         <thead class="table-light">
             <tr>
                 <th id="font-Montserrat" scope="col" valign="middle">Ссылки на статьи</th>
-                <th id="font-Montserrat" scope="col" valign="middle" style="width: 20%;">Текст</th>
+                <th id="font-Montserrat" scope="col" valign="middle" style="width: 25%;">Текст</th>
                 <th id="font-Montserrat" scope="col" valign="middle">Изображение</th>
                 <th id="font-Montserrat" scope="col" valign="middle">Дата публикации</th>
                 <th id="font-Montserrat" scope="col" valign="middle">Уровень позитива</th>
@@ -72,7 +72,7 @@ else @*До этого не дойдёт.*@
             {
                 <tr>
                     <td id="font-Montserrat" scope="row"><a href="@article.Title">@article.Title</a></td>
-                    <td id="font-Montserrat" scope="row" style="width: 20%;">@article.Text</td>
+                    <td id="font-Montserrat" scope="row" style="width: 25%;">@article.Text</td>
                     <td id="font-Montserrat" scope="row"><img src="@article.Source" alt="Изображение статьи" style="width:350px; height:auto;" /></td>
                     <td id="font-Montserrat" scope="row">@article.PublicationDate.ToString("dd.MM.yyyy H:mm")</td>
                     <td id="font-Montserrat" scope="row">@article.PositiveLevel</td>

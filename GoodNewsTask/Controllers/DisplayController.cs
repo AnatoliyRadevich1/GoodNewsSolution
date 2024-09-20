@@ -69,13 +69,14 @@ namespace GoodNewsTask.Controllers
                 ViewData["UserNotFoundMessage"] = "Нет такого пользователя";
                 return RedirectToAction("InputLoginPassword", "Authentication"); //закрыл баг при отсутствующем id
             }
+
             var selectedUser = _db.Users.FirstOrDefault(u => u.Id == userId);
             if (selectedUser == null)//До такого программа не пустит, а пользователь вполне себе может такое сделать
             {
                 ViewData["UserNotFoundMessage"] = "Нет такого пользователя";
                 return RedirectToAction("InputLoginPassword", "Authentication"); //закрыл баг при отсутствующем id
-
             }
+
             var articles = _db.Articles.Where(a => a.PositiveLevel >= selectedUser.SelectedPositiveLevel).ToList();// Получаем статьи, соответствующие уровню позитива пользователя
             if (!string.IsNullOrEmpty(searchElement))//для поиска данных по введённому пользователем тексту
             {
